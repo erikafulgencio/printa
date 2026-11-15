@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><style>
+body{margin:0;background:#e8e8e3;font-family:Archivo,system-ui,sans-serif;}
+a{color:#5c7a00;text-decoration:none;}a:hover{color:#456000;}
+@keyframes printaSpin{to{transform:rotate(360deg)}}
+@keyframes printaBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes printaSweep{0%{transform:translateY(-10px);opacity:0}30%{opacity:1}100%{transform:translateY(74px);opacity:0}}
+@keyframes printaIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes printaToastA{0%{opacity:0;transform:translateY(16px)}12%{opacity:1;transform:translateY(0)}80%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(8px)}}
+@keyframes printaToastB{0%{opacity:0;transform:translateY(16px)}12%{opacity:1;transform:translateY(0)}80%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(8px)}}
+</style></helmet>
+
+<div data-shop-root="1" style="min-height:100vh;min-height:100dvh;display:flex;justify-content:center;background:{{ outerBg }};">
+      <div style="width:100%;max-width:480px;height:100vh;height:100dvh;min-height:0;overflow:hidden;padding:env(safe-area-inset-top) 0 0;box-sizing:border-box;display:flex;flex-direction:column;font-family:Archivo,sans-serif;background:{{ c.bg }};color:{{ c.text }};position:relative;box-shadow:{{ frameShadow }};">
+
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:1;min-height:0;display:flex;flex-direction:column;">
+            <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:0 24px 22px;">
+
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0 0;">
+                <span style="font:800 19px/1 Archivo,sans-serif;letter-spacing:-0.02em;">Printa.</span>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span onClick="{{ goCart }}" style="height:34px;padding:0 13px;border-radius:99px;display:flex;align-items:center;gap:8px;cursor:pointer;box-sizing:border-box;background:{{ chipBg }};border:1px solid {{ chipBorder }};" style-active="transform:scale(0.96)">
+                    <span style="position:relative;width:15px;height:14px;border:1.6px solid {{ chipIco }};border-radius:3px;display:block;flex:0 0 auto;margin-top:3px;">
+                      <span style="position:absolute;left:50%;top:-6px;transform:translateX(-50%);width:9px;height:6px;border:1.6px solid {{ chipIco }};border-bottom:none;border-radius:5px 5px 0 0;display:block;"></span>
+                    </span>
+                    <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}">
+                      <span style="min-width:19px;height:19px;border-radius:99px;background:#d3f34d;display:flex;align-items:center;justify-content:center;font:800 11px/1 Archivo,sans-serif;color:#0f0f0e;">{{ cartCount }}</span>
+                    </sc-if>
+                  </span>
+                <div onClick="{{ toggleTheme }}" style="width:64px;height:34px;border-radius:99px;padding:3px;box-sizing:border-box;cursor:pointer;position:relative;display:flex;align-items:center;background:{{ th.trackBg }};">
+                  <span style="position:absolute;left:10px;top:0;bottom:0;display:flex;align-items:center;font:700 13px/1 Archivo,sans-serif;color:{{ th.sunColor }};">☀</span>
+                  <span style="position:absolute;right:10px;top:0;bottom:0;display:flex;align-items:center;font:700 13px/1 Archivo,sans-serif;color:{{ th.moonColor }};">☾</span>
+                  <span style="width:28px;height:28px;border-radius:99px;background:{{ th.knobBg }};transform:translateX({{ th.knobX }});transition:transform 200ms ease;display:flex;align-items:center;justify-content:center;font:700 14px/1 Archivo,sans-serif;color:{{ th.knobInk }};z-index:2;">{{ th.knobIcon }}</span>
+                </div>
+                </div>
+              </div>
+
+              <sc-if value="{{ hasNotice }}" hint-placeholder-val="{{ false }}">
+                <div role="status" style="margin-top:20px;flex:0 0 auto;border-radius:18px;padding:14px 16px;background:{{ noticeBg }};color:{{ noticeInk }};display:flex;gap:11px;align-items:flex-start;">
+                  <span style="width:8px;height:8px;border-radius:99px;margin-top:5px;flex:0 0 auto;background:{{ noticeDot }};"></span>
+                  <div style="min-width:0;">
+                    <div style="font:700 13.5px/1.3 Archivo,sans-serif;">{{ noticeTitle }}</div>
+                    <div style="font:400 12px/1.45 Archivo,sans-serif;margin-top:4px;">{{ noticeBody }}</div>
+                  </div>
+                </div>
+              </sc-if>
+
+              <div style="margin-top:38px;">
+                <div style="font:500 12px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">PRINT · SCAN · BIND</div>
+                <div style="font:800 33px/1.08 Archivo,sans-serif;letter-spacing:-0.035em;margin-top:14px;">Hello,<br>what are we<br>printing today?</div>
+              </div>
+
+              <div onClick="{{ addFile }}" style="margin-top:34px;flex:0 0 auto;background:{{ c.ink }};border-radius:28px;padding:26px;cursor:{{ uploadCursor }};opacity:{{ uploadOpacity }};position:relative;overflow:hidden;" style-active="transform:scale(0.99)">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+                  <div style="width:52px;height:52px;border-radius:18px;background:#d3f34d;display:flex;align-items:center;justify-content:center;font:300 32px/1 Archivo,sans-serif;color:#0f0f0e;padding-bottom:4px;box-sizing:border-box;">+</div>
+                  <div style="position:relative;width:54px;height:66px;animation:printaBob 5s ease-in-out infinite;">
+                    <div style="position:absolute;left:0;top:0;width:44px;height:58px;border-radius:6px;background:#ffffff;padding:9px 8px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;overflow:hidden;">
+                      <div style="height:2.5px;border-radius:9px;background:#c9c9c2;"></div>
+                      <div style="height:2.5px;border-radius:9px;background:#c9c9c2;"></div>
+                      <div style="height:2.5px;border-radius:9px;background:#c9c9c2;width:62%;"></div>
+                      <div style="position:absolute;left:0;right:0;top:0;height:2.5px;background:#d3f34d;animation:printaSweep 2.8s ease-in-out infinite;"></div>
+                    </div>
+                    <div style="position:absolute;right:0;bottom:0;width:44px;height:58px;border-radius:6px;background:#3a3a36;z-index:-1;"></div>
+                  </div>
+                </div>
+                <div style="font:800 25px/1.12 Archivo,sans-serif;letter-spacing:-0.03em;color:#fbfbf8;margin-top:34px;">Upload your<br>document</div>
+                <div style="font:500 11.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:#9d9d95;margin-top:12px;">PDF · DOCX · JPG — ONE PER REQUEST</div>
+                <div style="margin-top:22px;height:52px;border-radius:99px;background:#d3f34d;display:flex;align-items:center;justify-content:center;gap:9px;">
+                  <span style="font:800 16px/1 Archivo,sans-serif;letter-spacing:-0.01em;color:#0f0f0e;">{{ uploadCta }}</span>
+                  <span style="font:700 15px/1 Archivo,sans-serif;color:#0f0f0e;">→</span>
+                </div>
+              </div>
+
+              <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:14px;flex:0 0 auto;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:24px;padding:19px 20px;display:flex;flex-direction:column;gap:16px;animation:printaIn 260ms ease both;">
+                  <div style="display:flex;align-items:center;gap:13px;">
+                    <span style="width:38px;height:38px;border-radius:13px;flex:0 0 auto;background:{{ c.ink }};display:flex;align-items:center;justify-content:center;">
+                      <span style="position:relative;width:16px;height:15px;border:1.7px solid #fbfbf8;border-radius:3px;display:block;margin-top:3px;">
+                        <span style="position:absolute;left:50%;top:-6.5px;transform:translateX(-50%);width:10px;height:6.5px;border:1.7px solid #fbfbf8;border-bottom:none;border-radius:5px 5px 0 0;display:block;"></span>
+                      </span>
+                    </span>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font:700 14.5px/1.2 Archivo,sans-serif;">Unpaid cart</div>
+                      <div style="font:500 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:{{ c.sub }};margin-top:7px;">{{ cartCountLabel }} · NOT PAID YET</div>
+                    </div>
+                    <span style="font:800 20px/1 Archivo,sans-serif;letter-spacing:-0.03em;">{{ cartTotal }}</span>
+                  </div>
+                  <div style="display:flex;gap:8px;">
+                    <span onClick="{{ goCart }}" style="flex:1;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ c.chip }};font:700 13.5px/1 Archivo,sans-serif;color:{{ c.text }};" style-active="transform:scale(0.97)">View cart</span>
+                    <span onClick="{{ checkoutFromHome }}" style="flex:1;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;background:#d3f34d;font:800 13.5px/1 Archivo,sans-serif;color:#0f0f0e;" style-active="transform:scale(0.97)">Pay now<span style="font:700 13px/1 Archivo,sans-serif;color:#0f0f0e;">→</span></span>
+                  </div>
+                </div>
+              </sc-if>
+
+              <div style="margin-top:14px;flex:0 0 auto;display:flex;gap:12px;">
+                <div style="flex:1;background:{{ c.tint }};border-radius:22px;padding:18px 20px;">
+                  <div style="font:800 22px/1 Archivo,sans-serif;letter-spacing:-0.03em;color:{{ c.tintInk }};">{{ turnNum }}</div>
+                  <div style="font:500 11px/1.35 'IBM Plex Mono',monospace;color:{{ c.tintSub }};margin-top:7px;">{{ turnUnit }}<br>TURNAROUND</div>
+                </div>
+                <sc-if value="{{ hasOrder }}" hint-placeholder-val="{{ false }}">
+                  <div onClick="{{ goQueue }}" style="flex:1;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:22px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;" style-active="transform:scale(0.98)">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <span style="font:800 22px/1 Archivo,sans-serif;letter-spacing:-0.03em;">{{ queueNo }}</span>
+                      <span style="font:700 15px/1 Archivo,sans-serif;color:{{ c.sub }};">›</span>
+                    </div>
+                    <div style="font:500 11px/1.35 'IBM Plex Mono',monospace;color:{{ c.sub }};margin-top:16px;">TRACK YOUR<br>REQUESTS</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ showSignedTile }}" hint-placeholder-val="{{ false }}">
+                  <div style="flex:1;background:{{ c.tint }};border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <span style="width:26px;height:26px;border-radius:99px;background:{{ c.tintInk }};display:flex;align-items:center;justify-content:center;font:700 12px/1 Archivo,sans-serif;color:{{ c.tint }};">✓</span>
+                    </div>
+                    <div style="font:500 11px/1.35 'IBM Plex Mono',monospace;color:{{ c.tintSub }};margin-top:16px;">SIGNED IN —<br>HISTORY SAVED</div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ showCreateTile }}" hint-placeholder-val="{{ true }}">
+                  <div onClick="{{ createAccount }}" style="flex:1;background:{{ c.tint }};border-radius:22px;padding:18px 20px;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;" style-active="transform:scale(0.98)">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <span style="width:26px;height:26px;border-radius:99px;background:{{ c.tintInk }};display:flex;align-items:center;justify-content:center;font:400 17px/1 Archivo,sans-serif;color:{{ c.tint }};padding-bottom:2px;box-sizing:border-box;">+</span>
+                      <span style="font:700 15px/1 Archivo,sans-serif;color:{{ c.tintSub }};">›</span>
+                    </div>
+                    <div style="font:500 11px/1.35 'IBM Plex Mono',monospace;color:{{ c.tintSub }};margin-top:16px;">CREATE AN<br>ACCOUNT</div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid {{ c.line }};background:{{ c.bg }};padding:12px 24px calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;">
+              <div onClick="{{ goHome }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+                <span style="width:18px;height:18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;">
+                  <span style="font:700 13px/1 Archivo,sans-serif;color:{{ c.text }};">↑</span>
+                  <span style="width:14px;height:2px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+                </span>
+                <span style="font:600 10.5px/1 Archivo,sans-serif;">Upload</span>
+              </div>
+              <div onClick="{{ goHistory }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+                <span style="width:18px;height:18px;display:flex;align-items:flex-end;justify-content:center;gap:2.5px;">
+                  <span style="width:3px;height:8px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+                  <span style="width:3px;height:14px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+                  <span style="width:3px;height:11px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+                </span>
+                <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">History</span>
+              </div>
+              <div onClick="{{ goChat }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;position:relative;">
+                <span style="width:18px;height:14px;border-radius:5px 5px 5px 2px;border:2px solid {{ c.faint }};box-sizing:border-box;display:block;"></span>
+                <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">Chat</span>
+                <sc-if value="{{ chatDot }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:0;right:8px;width:8px;height:8px;border-radius:99px;background:#d3f34d;"></span></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isConfigure }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:14px 24px 34px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span onClick="{{ goHome }}" style="width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:400 20px/1 Archivo,sans-serif;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};color:{{ c.text }};">‹</span>
+              <div style="display:flex;align-items:center;gap:10px;">
+                
+                <sc-if value="{{ showCartChip }}" hint-placeholder-val="{{ false }}">
+                  <span onClick="{{ goCart }}" style="height:42px;padding:0 15px;border-radius:14px;display:flex;align-items:center;gap:8px;cursor:pointer;background:{{ c.ink }};" style-active="transform:scale(0.96)">
+                    <span style="position:relative;width:16px;height:15px;border:1.7px solid #fbfbf8;border-radius:3px;display:block;flex:0 0 auto;margin-top:3px;">
+                      <span style="position:absolute;left:50%;top:-6.5px;transform:translateX(-50%);width:10px;height:6.5px;border:1.7px solid #fbfbf8;border-bottom:none;border-radius:5px 5px 0 0;display:block;"></span>
+                    </span>
+                    <span style="min-width:20px;height:20px;border-radius:99px;background:#d3f34d;display:flex;align-items:center;justify-content:center;font:800 11.5px/1 Archivo,sans-serif;color:#0f0f0e;">{{ cartCount }}</span>
+                  </span>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="font:800 30px/1.1 Archivo,sans-serif;letter-spacing:-0.035em;margin:26px 0 0;">Print&nbsp;details</div>
+
+            <div style="margin-top:26px;display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ files }}" as="f" hint-placeholder-count="2">
+                <div style="display:flex;align-items:stretch;gap:8px;">
+                  <div style="position:relative;flex:1;min-width:0;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:20px;padding:15px 16px;display:flex;flex-direction:column;gap:12px;">
+                    <span style="width:46px;height:60px;border-radius:5px;background:#ffffff;border:1px solid {{ c.line }};box-shadow:0 1px 3px rgba(15,15,14,0.10);flex:0 0 auto;display:flex;flex-direction:column;gap:3px;padding:7px 6px;box-sizing:border-box;overflow:hidden;">
+                      <span style="height:4px;width:70%;border-radius:9px;background:#22221f;display:block;"></span>
+                      <span style="height:2px;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                      <span style="height:2px;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                      <span style="height:2px;width:85%;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                      <span style="height:2px;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                      <span style="height:2px;width:60%;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                      <span style="margin-top:auto;font:600 5.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:#8d8d85;">{{ f.kind }}</span>
+                    </span>
+                    <div style="min-width:0;">
+                      <div style="font:600 13.5px/1.3 Archivo,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:22px;">{{ f.name }}</div>
+                      <div style="font:500 10.5px/1.3 'IBM Plex Mono',monospace;color:{{ c.sub }};margin-top:6px;">{{ f.meta }}</div>
+                    </div>
+                    <span onClick="{{ f.remove }}" style="position:absolute;top:4px;right:4px;width:44px;height:44px;border-radius:99px;display:flex;align-items:center;justify-content:center;cursor:pointer;" style-active="transform:scale(0.92)">
+                      <span style="width:26px;height:26px;border-radius:99px;display:flex;align-items:center;justify-content:center;font:400 13px/1 Archivo,sans-serif;background:{{ c.chip }};color:{{ c.sub }};">✕</span>
+                    </span>
+                  </div>
+                  <div style="flex:0 0 auto;width:112px;background:{{ f.tileBg }};border:1px solid {{ f.tileBorder }};border-radius:20px;padding:12px 10px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;">
+                    <span style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:{{ f.labelInk }};">COPIES</span>
+                    <div style="display:flex;align-items:baseline;gap:3px;margin-top:3px;">
+                      <span style="font:400 13px/1 Archivo,sans-serif;color:{{ f.labelInk }};">×</span>
+                      <span style="font:800 30px/1 Archivo,sans-serif;letter-spacing:-0.04em;color:{{ f.numInk }};">{{ f.copies }}</span>
+                    </div>
+                    <span style="font:500 9.5px/1 'IBM Plex Mono',monospace;color:{{ f.labelInk }};">{{ f.sheetsLabel }}</span>
+                    <div style="margin-top:auto;padding-top:10px;display:flex;align-items:center;gap:6px;align-self:stretch;">
+                      <span onClick="{{ f.dec }}" style="flex:1;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ f.minusBg }};color:{{ f.minusInk }};font:400 20px/1 Archivo,sans-serif;padding-bottom:3px;box-sizing:border-box;" style-active="transform:scale(0.94)">–</span>
+                      <span onClick="{{ f.inc }}" style="flex:1;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#d3f34d;color:#0f0f0e;font:400 20px/1 Archivo,sans-serif;padding-bottom:3px;box-sizing:border-box;" style-active="transform:scale(0.94)">+</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ canAddMore }}" hint-placeholder-val="{{ true }}">
+                <div onClick="{{ addFile }}" style="border:1.5px dashed {{ c.dash }};border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:11px;cursor:pointer;">
+                  <span style="font:400 19px/1 Archivo,sans-serif;color:{{ c.sub }};">+</span>
+                  <span style="font:600 13.5px/1 Archivo,sans-serif;color:{{ c.sub }};">Add another document</span>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;">
+              <span style="font:500 11px/1.4 'IBM Plex Mono',monospace;color:{{ c.sub }};">{{ sheetSummary }}</span>
+            </div>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:32px 0 12px;">PAGES</div>
+            <div style="display:flex;gap:9px;align-items:stretch;">
+              <div onClick="{{ setAllPages }}" style="border-radius:16px;padding:15px 19px;cursor:pointer;display:flex;align-items:center;background:{{ pgAll.bg }};border:1.5px solid {{ pgAll.border }};color:{{ pgAll.ink }};">
+                <span style="font:700 14px/1 Archivo,sans-serif;">All pages</span>
+              </div>
+              <div onClick="{{ setRangePages }}" style="flex:1;border-radius:16px;padding:10px 17px;cursor:pointer;background:{{ pgRange.bg }};border:1.5px solid {{ pgRange.border }};">
+                <div style="font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:{{ pgRange.sub }};">RANGE</div>
+                <input value="{{ range }}" onChange="{{ onRange }}" placeholder="1-4, 9" style="width:100%;background:transparent;border:none;outline:none;margin-top:6px;padding:0;font:600 14px/1.1 Archivo,sans-serif;color:{{ pgRange.ink }};">
+              </div>
+            </div>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:26px 0 12px;">ORIENTATION</div>
+            <div style="display:flex;gap:9px;">
+              <div onClick="{{ setPortrait }}" style="flex:1;border-radius:16px;padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:11px;background:{{ orP.bg }};border:1.5px solid {{ orP.border }};color:{{ orP.ink }};">
+                <span style="width:17px;height:22px;border-radius:4px;border:1.5px solid {{ orP.ink }};flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:2.5px;padding:0 3px;box-sizing:border-box;">
+                  <span style="height:1.5px;border-radius:9px;background:{{ orP.ink }};opacity:0.55;display:block;"></span>
+                  <span style="height:1.5px;border-radius:9px;background:{{ orP.ink }};opacity:0.55;display:block;"></span>
+                  <span style="height:1.5px;width:60%;border-radius:9px;background:{{ orP.ink }};opacity:0.55;display:block;"></span>
+                </span>
+                <span style="font:700 14px/1 Archivo,sans-serif;">Portrait</span>
+              </div>
+              <div onClick="{{ setLandscape }}" style="flex:1;border-radius:16px;padding:16px 18px;cursor:pointer;display:flex;align-items:center;gap:11px;background:{{ orL.bg }};border:1.5px solid {{ orL.border }};color:{{ orL.ink }};">
+                <span style="width:24px;height:18px;border-radius:4px;border:1.5px solid {{ orL.ink }};flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;gap:2.5px;padding:0 3px;box-sizing:border-box;">
+                  <span style="height:1.5px;border-radius:9px;background:{{ orL.ink }};opacity:0.55;display:block;"></span>
+                  <span style="height:1.5px;width:65%;border-radius:9px;background:{{ orL.ink }};opacity:0.55;display:block;"></span>
+                </span>
+                <span style="font:700 14px/1 Archivo,sans-serif;">Landscape</span>
+              </div>
+            </div>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:26px 0 12px;">PAPER SIZE</div>
+            <div style="display:flex;gap:9px;">
+              <sc-for list="{{ papers }}" as="p" hint-placeholder-count="3">
+                <div onClick="{{ p.set }}" style="flex:1;border-radius:18px;padding:15px 12px;cursor:pointer;text-align:center;background:{{ p.bg }};border:1.5px solid {{ p.border }};color:{{ p.ink }};" style-active="transform:scale(0.98)">
+                  <div style="font:700 14px/1.2 Archivo,sans-serif;">{{ p.label }}</div>
+                  <div style="font:500 10px/1.3 'IBM Plex Mono',monospace;margin-top:6px;color:{{ p.sub }};">{{ p.dim }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:26px 0 12px;">INK</div>
+            <div style="display:flex;gap:9px;">
+              <div onClick="{{ setBW }}" style="flex:1;border-radius:18px;padding:17px 18px;cursor:pointer;background:{{ ink.bg }};border:1.5px solid {{ ink.border }};color:{{ ink.ink }};">
+                <div style="font:700 14.5px/1.2 Archivo,sans-serif;">Black &amp; white</div>
+                <div style="font:500 10.5px/1.3 'IBM Plex Mono',monospace;margin-top:6px;color:{{ ink.sub }};">{{ bwLabel }}</div>
+              </div>
+              <div onClick="{{ setColor }}" style="flex:1;border-radius:18px;padding:17px 18px;cursor:pointer;background:{{ col.bg }};border:1.5px solid {{ col.border }};color:{{ col.ink }};">
+                <div style="font:700 14.5px/1.2 Archivo,sans-serif;">Colored</div>
+                <div style="font:500 10.5px/1.3 'IBM Plex Mono',monospace;margin-top:6px;color:{{ col.sub }};">{{ colorLabel }}</div>
+              </div>
+            </div>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:26px 0 12px;">BINDING</div>
+            <div style="display:flex;flex-wrap:wrap;gap:9px;">
+              <sc-for list="{{ binding }}" as="x" hint-placeholder-count="4">
+                <div onClick="{{ x.toggle }}" style="display:flex;align-items:center;gap:10px;border-radius:99px;padding:11px 17px;cursor:pointer;background:{{ x.bg }};border:1.5px solid {{ x.border }};color:{{ x.ink }};" style-active="transform:scale(0.97)">
+                  <span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+                    <span style="width:{{ x.icoW }};height:{{ x.icoH }};border-radius:{{ x.icoR }};border:1.5px solid {{ x.ink }};position:relative;display:block;box-sizing:border-box;">
+                      <span style="position:absolute;left:{{ x.barL }};top:{{ x.barT }};width:{{ x.barW }};height:{{ x.barH }};border-radius:9px;background:{{ x.ink }};display:block;"></span>
+                    </span>
+                  </span>
+                  <span style="display:flex;flex-direction:column;gap:5px;">
+                    <span style="font:700 13.5px/1 Archivo,sans-serif;">{{ x.label }}</span>
+                    <sc-if value="{{ x.hasNote }}" hint-placeholder-val="{{ false }}">
+                      <span style="font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:{{ x.sub }};">{{ x.note }}</span>
+                    </sc-if>
+                  </span>
+                  <span style="font:500 11px/1 'IBM Plex Mono',monospace;color:{{ x.sub }};">{{ x.price }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ needsBind }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:18px;">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;">
+                  <span style="font:800 16px/1.2 Archivo,sans-serif;letter-spacing:-0.02em;">Soft bind details</span>
+                  <span style="font:500 10.5px/1 'IBM Plex Mono',monospace;color:{{ c.sub }};">{{ bindSummary }}</span>
+                </div>
+
+                <div>
+                  <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-bottom:9px;">WHICH DOCUMENTS?</div>
+                  <div style="display:flex;flex-direction:column;gap:7px;">
+                    <sc-for list="{{ bindDocList }}" as="d" hint-placeholder-count="2">
+                      <div onClick="{{ d.toggle }}" style="display:flex;align-items:center;gap:12px;border-radius:16px;padding:12px 14px;cursor:pointer;background:{{ d.bg }};border:1.5px solid {{ d.border }};" style-active="transform:scale(0.99)">
+                        <span style="width:22px;height:22px;border-radius:99px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:{{ d.markBg }};border:1.5px solid {{ d.markBorder }};font:700 11px/1 Archivo,sans-serif;color:{{ d.markInk }};box-sizing:border-box;">✓</span>
+                        <div style="flex:1;min-width:0;">
+                          <div style="font:600 13px/1.25 Archivo,sans-serif;color:{{ d.ink }};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ d.name }}</div>
+                          <div style="font:500 10px/1.3 'IBM Plex Mono',monospace;color:{{ d.sub }};margin-top:5px;">{{ d.pages }}</div>
+                        </div>
+                        <span style="font:700 13px/1 'IBM Plex Mono',monospace;color:{{ d.ink }};flex:0 0 auto;">{{ d.price }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-bottom:9px;">FOLDER COLOR</div>
+                  <div style="display:flex;gap:7px;">
+                    <sc-for list="{{ folderColors }}" as="o" hint-placeholder-count="3">
+                      <div onClick="{{ o.set }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;border-radius:16px;padding:12px 6px;cursor:pointer;background:{{ o.bg }};border:1.5px solid {{ o.border }};" style-active="transform:scale(0.97)">
+                        <span style="width:26px;height:26px;border-radius:99px;background:{{ o.swatch }};border:1px solid rgba(15,15,14,0.16);display:block;"></span>
+                        <span style="font:600 11px/1.2 Archivo,sans-serif;color:{{ o.ink }};text-align:center;">{{ o.label }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-bottom:9px;">BIND COLOR</div>
+                  <div style="display:flex;gap:7px;">
+                    <sc-for list="{{ bindColors }}" as="o" hint-placeholder-count="3">
+                      <div onClick="{{ o.set }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;border-radius:16px;padding:12px 6px;cursor:pointer;background:{{ o.bg }};border:1.5px solid {{ o.border }};" style-active="transform:scale(0.97)">
+                        <span style="width:26px;height:26px;border-radius:99px;background:{{ o.swatch }};border:1px solid rgba(15,15,14,0.16);display:block;"></span>
+                        <span style="font:600 11px/1.2 Archivo,sans-serif;color:{{ o.ink }};text-align:center;">{{ o.label }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div onClick="{{ toggleRush }}" style="display:flex;align-items:center;gap:12px;border-radius:18px;padding:14px;cursor:pointer;background:{{ c.chip }};" style-active="transform:scale(0.99)">
+                  <div style="flex:1;min-width:0;">
+                    <div style="font:700 13.5px/1.25 Archivo,sans-serif;">Rush — same day</div>
+                    <div style="font:500 10.5px/1.4 'IBM Plex Mono',monospace;color:{{ c.sub }};margin-top:6px;">{{ rushNote }}</div>
+                  </div>
+                  <span style="width:46px;height:26px;border-radius:99px;flex:0 0 auto;position:relative;background:{{ rushTrackBg }};display:block;">
+                    <span style="position:absolute;top:2px;left:{{ rushKnobX }};width:22px;height:22px;border-radius:99px;background:#d3f34d;display:block;transition:left 0.18s ease;"></span>
+                  </span>
+                </div>
+
+                <div style="border-top:1px solid {{ c.line }};padding-top:14px;">
+                  <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-bottom:10px;">PRICE PER DOCUMENT</div>
+                  <div style="display:flex;flex-direction:column;gap:7px;">
+                    <sc-for list="{{ bindTiers }}" as="t" hint-placeholder-count="5">
+                      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;">
+                        <span style="font:400 12.5px/1.3 Archivo,sans-serif;color:{{ c.sub }};">{{ t.label }}</span>
+                        <span style="font:600 12px/1 'IBM Plex Mono',monospace;">{{ t.price }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:26px 0 12px;">PAPER &amp; ENVELOPE</div>
+            <div style="display:flex;flex-wrap:wrap;gap:9px;">
+              <sc-for list="{{ supplies }}" as="x" hint-placeholder-count="3">
+                <div onClick="{{ x.toggle }}" style="display:flex;align-items:center;gap:10px;border-radius:99px;padding:11px 17px;cursor:pointer;background:{{ x.bg }};border:1.5px solid {{ x.border }};color:{{ x.ink }};" style-active="transform:scale(0.97)">
+                  <span style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;">
+                    <span style="width:{{ x.icoW }};height:{{ x.icoH }};border-radius:{{ x.icoR }};border:1.5px solid {{ x.ink }};position:relative;display:block;box-sizing:border-box;">
+                      <span style="position:absolute;left:{{ x.barL }};top:{{ x.barT }};width:{{ x.barW }};height:{{ x.barH }};border-radius:9px;background:{{ x.ink }};display:block;"></span>
+                    </span>
+                  </span>
+                  <span style="display:flex;flex-direction:column;gap:5px;">
+                    <span style="font:700 13.5px/1 Archivo,sans-serif;">{{ x.label }}</span>
+                    <sc-if value="{{ x.hasNote }}" hint-placeholder-val="{{ false }}">
+                      <span style="font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:{{ x.sub }};">{{ x.note }}</span>
+                    </sc-if>
+                  </span>
+                  <span style="font:500 11px/1 'IBM Plex Mono',monospace;color:{{ x.sub }};">{{ x.price }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ needsPaper }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:16px;">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;">
+                  <span style="font:800 16px/1.2 Archivo,sans-serif;letter-spacing:-0.02em;">Bond paper</span>
+                  <span style="font:500 10.5px/1 'IBM Plex Mono',monospace;color:{{ c.sub }};">{{ paperQtyNote }}</span>
+                </div>
+
+                <div>
+                  <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-bottom:9px;">SIZE</div>
+                  <div style="display:flex;gap:7px;">
+                    <sc-for list="{{ buySizes }}" as="b" hint-placeholder-count="3">
+                      <div onClick="{{ b.set }}" style="flex:1;border-radius:16px;padding:13px 8px;cursor:pointer;text-align:center;background:{{ b.bg }};border:1.5px solid {{ b.border }};" style-active="transform:scale(0.97)">
+                        <div style="font:700 13.5px/1.2 Archivo,sans-serif;color:{{ b.ink }};">{{ b.label }}</div>
+                        <div style="font:500 9.5px/1.3 'IBM Plex Mono',monospace;margin-top:6px;color:{{ b.sub }};">{{ b.dim }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-bottom:9px;">HOW MANY PIECES?</div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span onClick="{{ paperMinus }}" style="width:56px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ c.chip }};color:{{ paperMinusInk }};font:400 20px/1 Archivo,sans-serif;padding-bottom:3px;box-sizing:border-box;" style-active="transform:scale(0.96)">–</span>
+                    <div style="flex:1;text-align:center;">
+                      <div style="font:800 26px/1 Archivo,sans-serif;letter-spacing:-0.03em;">{{ paperQty }}</div>
+                      <div style="font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:{{ c.sub }};margin-top:7px;">PIECES · STEPS OF 5</div>
+                    </div>
+                    <span onClick="{{ paperPlus }}" style="width:56px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#d3f34d;color:#0f0f0e;font:400 20px/1 Archivo,sans-serif;padding-bottom:3px;box-sizing:border-box;" style-active="transform:scale(0.96)">+</span>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ needsSize }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:12px;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:20px;padding:15px 17px;display:flex;align-items:center;gap:12px;">
+                <span style="flex:1;font:600 13.5px/1.3 Archivo,sans-serif;">Envelope size</span>
+                <div style="display:flex;gap:5px;border-radius:99px;padding:4px;background:{{ c.chip }};">
+                  <span onClick="{{ setShort }}" style="font:700 12.5px/1 Archivo,sans-serif;padding:10px 16px;border-radius:99px;cursor:pointer;background:{{ szShort.bg2 }};color:{{ szShort.text }};">Short</span>
+                  <span onClick="{{ setLong }}" style="font:700 12.5px/1 Archivo,sans-serif;padding:10px 16px;border-radius:99px;cursor:pointer;background:{{ szLong.bg2 }};color:{{ szLong.text }};">Long</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:26px 0 12px;display:flex;align-items:baseline;justify-content:space-between;gap:10px;">
+              <span>SPECIAL INSTRUCTION</span>
+              <span style="letter-spacing:0.08em;color:{{ c.faint }};">OPTIONAL</span>
+            </div>
+            <div style="background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:20px;padding:17px 19px;">
+              <textarea value="{{ notes }}" onChange="{{ onNotes }}" maxLength="{{ notesMax }}" rows="3" placeholder="e.g. Leave the printed documents to the Soondy counter" style="width:100%;background:transparent;border:none;outline:none;padding:0;resize:none;box-sizing:border-box;font:500 14px/1.5 Archivo,sans-serif;color:{{ c.text }};"></textarea>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:10px;">
+                
+                
+              <span style="font:600 10px/1 'IBM Plex Mono',monospace;color:{{ notesCountInk }};">{{ notesCount }}</span></div>
+            </div>
+
+            <div style="margin-top:32px;background:{{ c.ink }};border-radius:26px;padding:22px;">
+              <div style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:#9d9d95;margin-bottom:14px;">ORDER SUMMARY</div>
+              <sc-for list="{{ lines }}" as="line" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;gap:12px;padding:5px 0;">
+                  <span style="font:400 13.5px/1.4 Archivo,sans-serif;color:#b4b4ac;">{{ line.label }}</span>
+                  <span style="font:500 13px/1.4 'IBM Plex Mono',monospace;color:#e9e9e2;white-space:nowrap;">{{ line.amount }}</span>
+                </div>
+              </sc-for>
+              <div style="height:1px;background:#2e2e2a;margin:14px 0;"></div>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+                <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:#9d9d95;">TOTAL</span>
+                <span style="font:800 32px/1 Archivo,sans-serif;letter-spacing:-0.03em;color:#d3f34d;">{{ totalLabel }}</span>
+              </div>
+              <div onClick="{{ addToCart }}" style="margin-top:18px;height:56px;border-radius:99px;background:{{ submitBg }};display:flex;align-items:center;justify-content:center;gap:10px;cursor:{{ submitCursor }};" style-active="transform:scale(0.99)">
+                <span style="font:800 16.5px/1 Archivo,sans-serif;letter-spacing:-0.01em;color:{{ submitInk }};">Add to cart</span>
+                <span style="font:700 15px/1 Archivo,sans-serif;color:{{ submitInk }};">→</span>
+              </div>
+              <div style="font:500 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:#9d9d95;text-align:center;margin-top:14px;">{{ submitNote }}</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isCart }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;min-height:0;display:flex;flex-direction:column;position:relative;">
+            <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:14px 24px 20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span onClick="{{ goHome }}" style="width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:400 20px/1 Archivo,sans-serif;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};color:{{ c.text }};">‹</span>
+                <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:{{ c.sub }};">{{ cartCountLabel }}</span>
+              </div>
+
+              <div style="font:800 30px/1.1 Archivo,sans-serif;letter-spacing:-0.035em;margin:26px 0 0;">Your&nbsp;cart</div>
+              <p style="margin:10px 0 0;font:400 13.5px/1.55 Archivo,sans-serif;color:{{ c.sub }};text-wrap:pretty;">Each request keeps its own settings. Pay for all of them in one GCash transaction.</p>
+
+              <div style="margin-top:22px;display:flex;flex-direction:column;gap:10px;">
+                <sc-for list="{{ cartItems }}" as="it" hint-placeholder-count="2">
+                  <div style="background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:22px;padding:16px 17px;display:flex;flex-direction:column;gap:13px;animation:printaIn 260ms ease both;">
+                    <div style="display:flex;align-items:flex-start;gap:13px;">
+                      <span style="width:40px;height:52px;border-radius:5px;background:#ffffff;border:1px solid {{ c.line }};flex:0 0 auto;display:flex;flex-direction:column;gap:3px;padding:6px 5px;box-sizing:border-box;overflow:hidden;">
+                        <span style="height:3.5px;width:70%;border-radius:9px;background:#22221f;display:block;"></span>
+                        <span style="height:2px;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                        <span style="height:2px;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                        <span style="height:2px;width:60%;border-radius:9px;background:#c9c9c2;display:block;"></span>
+                        <span style="margin-top:auto;font:600 5.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:#8d8d85;">{{ it.kind }}</span>
+                      </span>
+                      <div style="flex:1;min-width:0;">
+                        <div style="font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.faint }};">{{ it.n }}</div>
+                        <div style="font:600 14px/1.3 Archivo,sans-serif;margin-top:7px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ it.name }}</div>
+                        <div style="font:400 12px/1.5 Archivo,sans-serif;color:{{ c.sub }};margin-top:5px;text-wrap:pretty;">{{ it.summary }}</div>
+                      </div>
+                      <span style="font:800 17px/1 Archivo,sans-serif;letter-spacing:-0.02em;white-space:nowrap;">{{ it.total }}</span>
+                    </div>
+                    <sc-if value="{{ it.hasNotes }}" hint-placeholder-val="{{ false }}">
+                      <div style="background:{{ c.chip }};border-radius:14px;padding:11px 13px;font:400 12px/1.5 Archivo,sans-serif;color:{{ c.sub }};">“{{ it.notes }}”</div>
+                    </sc-if>
+                    <div style="display:flex;gap:8px;">
+                      <span onClick="{{ it.edit }}" style="flex:1;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ c.chip }};font:700 13px/1 Archivo,sans-serif;color:{{ c.text }};" style-active="transform:scale(0.97)">Edit</span>
+                      <span onClick="{{ it.remove }}" style="flex:1;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid {{ c.line }};font:700 13px/1 Archivo,sans-serif;color:{{ c.sub }};" style-active="transform:scale(0.97)">Remove</span>
+                    </div>
+                  </div>
+                </sc-for>
+
+                <sc-if value="{{ emptyCart }}" hint-placeholder-val="{{ false }}">
+                  <div style="background:{{ c.chip }};border-radius:20px;padding:20px;font:400 13px/1.5 Archivo,sans-serif;color:{{ c.sub }};text-wrap:pretty;">Nothing here yet — start a print request below and it will wait in the cart until you pay.</div>
+                </sc-if>
+                <div onClick="{{ newRequest }}" style="border:1.5px dashed {{ c.dash }};border-radius:22px;padding:18px;display:flex;align-items:center;gap:12px;cursor:pointer;" style-active="transform:scale(0.99)">
+                  <span style="width:34px;height:34px;border-radius:12px;background:{{ c.chip }};display:flex;align-items:center;justify-content:center;font:300 21px/1 Archivo,sans-serif;color:{{ c.text }};padding-bottom:3px;box-sizing:border-box;">+</span>
+                  <span style="flex:1;min-width:0;">
+                    <span style="display:block;font:700 14px/1 Archivo,sans-serif;">Add new print request</span>
+                    <span style="display:block;font:500 10.5px/1 'IBM Plex Mono',monospace;color:{{ c.sub }};margin-top:7px;">UPLOAD ANOTHER DOCUMENT</span>
+                  </span>
+                  <span style="font:700 15px/1 Archivo,sans-serif;color:{{ c.sub }};">›</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="border-top:1px solid {{ c.line }};background:{{ c.bg }};padding:16px 24px 30px;">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+                <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">TOTAL</span>
+                <span style="font:800 30px/1 Archivo,sans-serif;letter-spacing:-0.03em;">{{ cartTotal }}</span>
+              </div>
+              <div onClick="{{ checkout }}" style="margin-top:14px;height:56px;border-radius:99px;background:{{ coBg }};display:flex;align-items:center;justify-content:center;gap:10px;cursor:{{ coCursor }};" style-active="transform:scale(0.99)">
+                <span style="font:800 16.5px/1 Archivo,sans-serif;letter-spacing:-0.01em;color:{{ coInk }};">Checkout</span>
+                <span style="font:700 15px/1 Archivo,sans-serif;color:{{ coInk }};">→</span>
+              </div>
+            </div>
+
+            <sc-if value="{{ toastOn }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:24px;right:24px;bottom:164px;pointer-events:none;display:flex;justify-content:center;animation:{{ toastAnim }};">
+              <div style="background:{{ c.ink }};border-radius:99px;padding:13px 20px;display:flex;align-items:center;gap:11px;box-shadow:0 10px 28px rgba(15,15,14,0.22);">
+                <span style="width:22px;height:22px;border-radius:99px;background:#d3f34d;display:flex;align-items:center;justify-content:center;font:800 12px/1 Archivo,sans-serif;color:#0f0f0e;">✓</span>
+                <span style="font:600 13px/1 Archivo,sans-serif;color:#fbfbf8;white-space:nowrap;">Added — {{ toastText }}</span>
+              </div>
+            </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isDetails }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:14px 24px 34px;">
+            <span onClick="{{ goCart }}" style="width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:400 20px/1 Archivo,sans-serif;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};color:{{ c.text }};">‹</span>
+
+            <div style="font:800 30px/1.1 Archivo,sans-serif;letter-spacing:-0.035em;margin:26px 0 0;">Where should<br>we send it?</div>
+
+            <div style="margin-top:28px;background:{{ c.surface }};border:1.5px solid {{ nameBorder }};border-radius:20px;padding:17px 19px;">
+              <div style="display:flex;align-items:baseline;gap:6px;">
+                <span style="font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">FULL NAME</span>
+                <span style="font:600 9.5px/1 'IBM Plex Mono',monospace;color:#e0653f;">REQUIRED</span>
+              </div>
+              <input value="{{ name }}" onChange="{{ onName }}" placeholder="Juan Dela Cruz" style="width:100%;background:transparent;border:none;outline:none;padding:0;margin-top:9px;font:600 16px/1.2 Archivo,sans-serif;color:{{ c.text }};">
+            </div>
+            <div style="margin-top:11px;background:{{ c.surface }};border:1.5px solid {{ addrBorder }};border-radius:20px;padding:17px 19px;">
+              <div style="display:flex;align-items:baseline;gap:6px;">
+                <span style="font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">ADDRESS</span>
+                <span style="font:600 9.5px/1 'IBM Plex Mono',monospace;color:#e0653f;">REQUIRED</span>
+              </div>
+              <input value="{{ address }}" onChange="{{ onAddress }}" placeholder="House no., street, barangay" style="width:100%;background:transparent;border:none;outline:none;padding:0;margin-top:9px;font:600 15px/1.2 Archivo,sans-serif;color:{{ c.text }};">
+            </div>
+
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:30px 0 12px;">HOW TO GET IT</div>
+            <div style="display:flex;gap:8px;">
+              <div onClick="{{ setSelfPickup }}" style="flex:1;border-radius:18px;padding:15px 14px;cursor:pointer;background:{{ fSelf.bg }};border:1.5px solid {{ fSelf.border }};color:{{ fSelf.ink }};" style-active="transform:scale(0.98)">
+                <div style="font:700 13.5px/1.2 Archivo,sans-serif;">Pick it up</div>
+                <div style="font:500 9.5px/1.3 'IBM Plex Mono',monospace;margin-top:6px;color:{{ fSelf.sub }};">FREE</div>
+              </div>
+              <div onClick="{{ setDelivery }}" style="flex:1;border-radius:18px;padding:15px 14px;cursor:pointer;background:{{ fDeliv.bg }};border:1.5px solid {{ fDeliv.border }};color:{{ fDeliv.ink }};" style-active="transform:scale(0.98)">
+                <div style="font:700 13.5px/1.2 Archivo,sans-serif;">Deliver it</div>
+                <div style="font:500 9.5px/1.3 'IBM Plex Mono',monospace;margin-top:6px;color:{{ fDeliv.sub }};">YOU PAY THE RIDER</div>
+              </div>
+            </div>
+
+            <sc-if value="{{ isDelivery }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:10px;">
+                <sc-for list="{{ courierOpts }}" as="co" hint-placeholder-count="2">
+                  <div onClick="{{ co.set }}" style="border-radius:20px;padding:17px 19px;cursor:pointer;display:flex;align-items:center;gap:14px;background:{{ co.bg }};border:1.5px solid {{ co.border }};color:{{ co.ink }};" style-active="transform:scale(0.99)">
+                    <span style="width:12px;height:12px;border-radius:99px;flex:0 0 auto;background:{{ co.dot }};"></span>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font:700 15px/1.2 Archivo,sans-serif;">{{ co.name }}</div>
+                      <div style="font:400 11.5px/1.35 Archivo,sans-serif;margin-top:5px;color:{{ co.sub }};">{{ co.note }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ noCouriers }}" hint-placeholder-val="{{ false }}">
+                  <div style="border-radius:20px;padding:16px 18px;border:1px dashed {{ c.dash }};font:400 12.5px/1.5 Archivo,sans-serif;color:{{ c.sub }};">Delivery isn’t available right now. Choose pick-up instead.</div>
+                </sc-if>
+                <div style="font:400 11.5px/1.5 Archivo,sans-serif;color:{{ c.faint }};padding:0 4px;">The delivery fare is charged to you by the rider on arrival — it is not part of the total below.</div>
+              </div>
+
+              <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:30px 0 12px;">RIDER PICKS UP FROM</div>
+              <div style="flex:0 0 auto;border-radius:20px;overflow:hidden;background:{{ c.surface }};border:1px solid {{ c.line }};">
+                <img src="assets/blue-chapel-streetview.jpg" alt="Street view of Our Lady of Fatima Chapel on Nadurata St., Manila" style="display:block;width:100%;height:172px;object-fit:cover;object-position:center 42%;">
+                <div style="padding:15px 17px;">
+                  <div style="font:700 15px/1.2 Archivo,sans-serif;">4th Ave. Our Lady of Fatima Chapel</div>
+                  <div style="font:400 11.5px/1.35 Archivo,sans-serif;margin-top:5px;color:{{ c.sub }};">122 Nadurata St., Manila · beside the gate</div>
+                  <div style="display:flex;align-items:center;gap:12px;margin-top:14px;">
+                    <div style="flex:1;min-width:0;font:500 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:{{ c.faint }};">ALL DELIVERIES DISPATCH HERE</div>
+                    <a href="https://www.google.com/maps/dir/?api=1&amp;destination=14.6438535,120.9784495" target="_blank" rel="noreferrer" style="flex:0 0 auto;display:flex;align-items:center;gap:8px;text-decoration:none;border-radius:99px;padding:11px 15px;background:{{ c.ink }};color:#d3f34d;font:700 12.5px/1 Archivo,sans-serif;" style-active="transform:scale(0.97)">
+                      <span style="width:14px;height:14px;border:1.5px solid #d3f34d;border-radius:99px 99px 99px 2px;transform:rotate(-45deg);box-sizing:border-box;display:block;"></span>
+                      <span>Directions</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isSelfPickup }}" hint-placeholder-val="{{ true }}">
+            <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.16em;color:{{ c.sub }};margin:30px 0 12px;display:flex;align-items:baseline;gap:6px;">
+              <span>PICK-UP POINT</span>
+              <span style="color:#e0653f;letter-spacing:0.14em;">REQUIRED</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+
+              <sc-for list="{{ pickupOpts }}" as="pu" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  <div onClick="{{ pu.set }}" style="border-radius:20px;padding:18px 19px;cursor:pointer;display:flex;align-items:center;gap:14px;background:{{ pu.bg }};border:1.5px solid {{ pu.border }};color:{{ pu.ink }};" style-active="transform:scale(0.99)">
+                    <span style="width:12px;height:12px;border-radius:99px;flex:0 0 auto;background:{{ pu.dot }};"></span>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font:700 15px/1.2 Archivo,sans-serif;">{{ pu.name }}</div>
+                      <div style="font:400 11.5px/1.35 Archivo,sans-serif;margin-top:5px;color:{{ pu.subInk }};">{{ pu.sub }}</div>
+                    </div>
+                  </div>
+                  <sc-if value="{{ pu.showCard }}" hint-placeholder-val="{{ false }}">
+                    <div style="border-radius:20px;overflow:hidden;background:{{ c.surface }};border:1px solid {{ c.line }};">
+                      <sc-if value="{{ pu.hasPhoto }}" hint-placeholder-val="{{ true }}">
+                        <img src="{{ pu.photo }}" alt="{{ pu.alt }}" style="display:block;width:100%;height:172px;object-fit:cover;object-position:center 45%;">
+                      </sc-if>
+                      <div style="padding:15px 17px;display:flex;align-items:center;gap:12px;">
+                        <div style="flex:1;min-width:0;">
+                          <div style="font:700 13.5px/1.25 Archivo,sans-serif;">{{ pu.addr }}</div>
+                          <div style="font:500 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:{{ c.sub }};margin-top:6px;">{{ pu.city }}</div>
+                        </div>
+                        <sc-if value="{{ pu.hasMap }}" hint-placeholder-val="{{ true }}">
+                          <a href="{{ pu.map }}" target="_blank" rel="noreferrer" style="flex:0 0 auto;display:flex;align-items:center;gap:8px;text-decoration:none;border-radius:99px;padding:11px 15px;background:{{ c.ink }};color:#d3f34d;font:700 12.5px/1 Archivo,sans-serif;" style-active="transform:scale(0.97)">
+                            <span style="width:14px;height:14px;border:1.5px solid #d3f34d;border-radius:99px 99px 99px 2px;transform:rotate(-45deg);box-sizing:border-box;display:block;"></span>
+                            <span>Directions</span>
+                          </a>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noPickups }}" hint-placeholder-val="{{ false }}">
+                <div style="border-radius:20px;padding:16px 18px;border:1px dashed {{ c.dash }};font:400 12.5px/1.5 Archivo,sans-serif;color:{{ c.sub }};">No pick-up point is open right now. Choose delivery instead.</div>
+              </sc-if>
+            </div>
+            </sc-if>
+
+            <div style="margin-top:30px;background:{{ c.ink }};border-radius:26px;padding:22px;">
+              <div style="display:flex;gap:10px;padding:0 0 10px;border-bottom:1px solid #2e2e2a;">
+                <span style="width:20px;flex:0 0 auto;font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#7e7e77;">#</span>
+                <span style="flex:1;min-width:0;font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#7e7e77;">DOCUMENT</span>
+                <span style="width:34px;flex:0 0 auto;text-align:right;font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#7e7e77;">COPIES</span>
+                <span style="width:62px;flex:0 0 auto;text-align:right;font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#7e7e77;">AMOUNT</span>
+              </div>
+              <sc-for list="{{ coLines }}" as="line" hint-placeholder-count="3">
+                <div style="display:flex;align-items:baseline;gap:10px;padding:9px 0;">
+                  <span style="width:20px;flex:0 0 auto;font:500 12px/1.4 'IBM Plex Mono',monospace;color:#7e7e77;">{{ line.no }}</span>
+                  <span style="flex:1;min-width:0;font:400 13.5px/1.4 Archivo,sans-serif;color:#e9e9e2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ line.name }}</span>
+                  <span style="width:34px;flex:0 0 auto;text-align:right;font:500 12.5px/1.4 'IBM Plex Mono',monospace;color:#b4b4ac;">{{ line.copies }}</span>
+                  <span style="width:62px;flex:0 0 auto;text-align:right;font:500 13px/1.4 'IBM Plex Mono',monospace;color:#e9e9e2;">{{ line.amount }}</span>
+                </div>
+              </sc-for>
+              <div style="height:1px;background:#2e2e2a;margin:14px 0;"></div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+                <span style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:#9d9d95;">GRAND TOTAL</span>
+                <span style="font:800 30px/1 Archivo,sans-serif;letter-spacing:-0.03em;color:#d3f34d;">{{ coTotal }}</span>
+              </div>
+              <div onClick="{{ payNow }}" style="margin-top:18px;height:56px;border-radius:99px;background:{{ payBg }};display:flex;align-items:center;justify-content:center;gap:10px;cursor:{{ payCursor }};" style-active="transform:scale(0.99)">
+                <span style="width:22px;height:22px;border-radius:7px;background:{{ payMarkBg }};display:flex;align-items:center;justify-content:center;font:800 10px/1 Archivo,sans-serif;color:{{ payMarkInk }};">G</span>
+                <span style="font:800 16.5px/1 Archivo,sans-serif;letter-spacing:-0.01em;color:{{ payInk }};">Pay with GCash</span>
+              </div>
+              <sc-if value="{{ hasMissing }}" hint-placeholder-val="{{ false }}">
+                <div style="font:500 10.5px/1.5 'IBM Plex Mono',monospace;letter-spacing:0.06em;color:#e0653f;text-align:center;margin-top:14px;">{{ missingNote }}</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isPaying }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:0 40px 60px;">
+            <div style="width:64px;height:64px;border-radius:99px;border:3px solid {{ c.line }};border-top-color:#d3f34d;animation:printaSpin 0.85s linear infinite;"></div>
+            <div style="text-align:center;">
+              <div style="font:800 21px/1.25 Archivo,sans-serif;letter-spacing:-0.02em;">Waiting for GCash</div>
+              <div style="font:400 13.5px/1.6 Archivo,sans-serif;color:{{ c.sub }};margin-top:10px;">Approve {{ coTotal }} in the app. We'll bring you straight back.</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isQueue }}" hint-placeholder-val="{{ false }}">
+         <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div style="flex:1;display:flex;flex-direction:column;padding:14px 24px 20px;overflow:auto;">
+            <div style="display:flex;align-items:center;gap:12px;padding-bottom:16px;">
+              <span onClick="{{ queueBack }}" style="width:42px;height:42px;flex:0 0 auto;border-radius:14px;display:flex;align-items:center;justify-content:center;font:400 20px/1 Archivo,sans-serif;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};color:{{ c.text }};">‹</span>
+              <span style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">TRANSACTION HISTORY</span>
+            </div>
+            <div style="flex:0 0 auto;background:{{ c.ink }};border-radius:28px;padding:26px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font:500 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ activeStageInk }};">{{ activeStage }}</span>
+                <span style="font:500 10.5px/1 'IBM Plex Mono',monospace;color:#9d9d95;">{{ activeEta }}</span>
+              </div>
+              <div style="font:800 46px/1 Archivo,sans-serif;letter-spacing:-0.045em;color:#fbfbf8;margin-top:24px;">{{ txn }}</div>
+              <div style="font:400 13.5px/1.5 Archivo,sans-serif;color:#b4b4ac;margin-top:12px;">{{ activeRefNote }}</div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:22px;padding-top:18px;border-top:1px solid #2e2e2a;">
+                <span style="font:500 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:#9d9d95;">AMOUNT PAID</span>
+                <span style="font:700 17px/1 'IBM Plex Mono',monospace;color:#d3f34d;">{{ activeTotal }}</span>
+              </div>
+            </div>
+
+            <div style="margin-top:14px;background:{{ c.surface }};border:1px solid {{ c.line }};border-radius:24px;padding:20px 22px;">
+              <sc-for list="{{ steps }}" as="step" hint-placeholder-count="6">
+                <div style="display:flex;flex-direction:column;">
+                <div style="display:flex;align-items:center;gap:14px;padding:10px 0;">
+                  <sc-if value="{{ step.done }}" hint-placeholder-val="{{ true }}">
+                    <span style="width:24px;height:24px;border-radius:99px;flex:0 0 auto;background:{{ step.markBg }};display:flex;align-items:center;justify-content:center;font:700 12px/1 Archivo,sans-serif;color:{{ step.markInk }};">✓</span>
+                  </sc-if>
+                  <sc-if value="{{ step.busy }}" hint-placeholder-val="{{ false }}">
+                    <span style="width:24px;height:24px;border-radius:99px;flex:0 0 auto;border:2.5px solid {{ c.chip }};border-top-color:#0f0f0e;animation:printaSpin 0.8s linear infinite;box-sizing:border-box;"></span>
+                  </sc-if>
+                  <sc-if value="{{ step.alert }}" hint-placeholder-val="{{ false }}">
+                    <span style="width:24px;height:24px;border-radius:99px;flex:0 0 auto;background:{{ step.markBg }};display:flex;align-items:center;justify-content:center;font:800 13px/1 Archivo,sans-serif;color:{{ step.markInk }};">!</span>
+                  </sc-if>
+                  <sc-if value="{{ step.idle }}" hint-placeholder-val="{{ false }}">
+                    <span style="width:24px;height:24px;border-radius:99px;flex:0 0 auto;border:2px solid {{ c.line }};box-sizing:border-box;"></span>
+                  </sc-if>
+                  <div style="flex:1;min-width:0;">
+                    <div style="font:600 14px/1.3 Archivo,sans-serif;color:{{ step.color }};">{{ step.label }}</div>
+                    <div style="font:400 11.5px/1.4 Archivo,sans-serif;color:{{ c.sub }};margin-top:3px;">{{ step.note }}</div>
+                  </div>
+                  <span style="font:500 11px/1 'IBM Plex Mono',monospace;color:{{ c.sub }};">{{ step.time }}</span>
+                </div>
+                <sc-if value="{{ step.hasSubs }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin:0 0 8px 38px;padding-left:14px;border-left:1.5px solid {{ c.line }};display:flex;flex-direction:column;gap:9px;">
+                    <sc-for list="{{ step.subs }}" as="sub" hint-placeholder-count="4">
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="width:16px;height:16px;border-radius:99px;flex:0 0 auto;box-sizing:border-box;border:1.5px solid {{ sub.markBorder }};background:{{ sub.markBg }};display:flex;align-items:center;justify-content:center;font:800 9px/1 Archivo,sans-serif;color:{{ sub.markInk }};">✓</span>
+                        <span style="font:500 12.5px/1.3 Archivo,sans-serif;color:{{ sub.color }};">{{ sub.label }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ noAccount }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:14px;background:{{ c.tint }};border-radius:24px;padding:20px 22px;display:flex;align-items:center;gap:14px;">
+                <div style="flex:1;">
+                  <div style="font:700 15px/1.25 Archivo,sans-serif;color:{{ c.tintInk }};">Create an Account</div>
+                  <div style="font:400 12px/1.45 Archivo,sans-serif;color:{{ c.tintSub }};margin-top:5px;">One tap — we use this transaction's details.</div>
+                </div>
+                <div onClick="{{ createAccount }}" style="border-radius:99px;height:46px;padding:0 20px;display:flex;align-items:center;cursor:pointer;background:{{ c.ink }};flex:0 0 auto;" style-active="transform:scale(0.97)">
+                  <span style="font:700 14px/1 Archivo,sans-serif;color:#d3f34d;">Create</span>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasAccount }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;background:{{ c.tint }};border-radius:24px;padding:18px 22px;display:flex;align-items:center;gap:12px;">
+                <span style="width:22px;height:22px;border-radius:99px;background:{{ c.tintInk }};display:flex;align-items:center;justify-content:center;font:700 11px/1 Archivo,sans-serif;color:{{ c.tint }};flex:0 0 auto;">✓</span>
+                <span style="font:600 13.5px/1.4 Archivo,sans-serif;color:{{ c.tintInk }};">Signed in — your requests are saved.</span>
+              </div>
+            </sc-if>
+
+            <div style="margin-top:auto;padding-top:22px;display:flex;gap:10px;">
+              <div onClick="{{ goChat }}" style="flex:1;height:54px;border-radius:99px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};">
+                <span style="font:700 14.5px/1 Archivo,sans-serif;">Chat</span>
+              </div>
+              <div onClick="{{ reset }}" style="flex:2;height:54px;border-radius:99px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ c.ink }};">
+                <span style="font:700 14.5px/1 Archivo,sans-serif;color:#d3f34d;">New print request</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid {{ c.line }};background:{{ c.bg }};padding:12px 24px calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;">
+            <div onClick="{{ goHome }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+              <span style="width:18px;height:18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;">
+                <span style="font:700 13px/1 Archivo,sans-serif;color:{{ c.faint }};">↑</span>
+                <span style="width:14px;height:2px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+              </span>
+              <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">Upload</span>
+            </div>
+            <div onClick="{{ goHistory }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+              <span style="width:18px;height:18px;display:flex;align-items:flex-end;justify-content:center;gap:2.5px;">
+                <span style="width:3px;height:8px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+                <span style="width:3px;height:14px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+                <span style="width:3px;height:11px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+              </span>
+              <span style="font:600 10.5px/1 Archivo,sans-serif;">History</span>
+            </div>
+            <div onClick="{{ goChat }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;position:relative;">
+              <span style="width:18px;height:14px;border-radius:5px 5px 5px 2px;border:2px solid {{ c.faint }};box-sizing:border-box;display:block;"></span>
+              <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">Chat</span>
+              <sc-if value="{{ chatDot }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:0;right:8px;width:8px;height:8px;border-radius:99px;background:#d3f34d;"></span></sc-if>
+            </div>
+          </div>
+         </div>
+        </sc-if>
+
+        <sc-if value="{{ isAuth }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:14px 24px 34px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span onClick="{{ authBack }}" style="width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:400 20px/1 Archivo,sans-serif;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};color:{{ c.text }};">‹</span>
+              <span onClick="{{ authBack }}" style="font:600 12.5px/1 Archivo,sans-serif;color:{{ c.sub }};cursor:pointer;padding:8px;">Skip for now</span>
+            </div>
+
+            <div style="margin-top:30px;">
+              <div style="font:500 12px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">ONE TAP — NO PASSWORD</div>
+              <div style="font:800 32px/1.08 Archivo,sans-serif;letter-spacing:-0.035em;margin-top:14px;">Save your<br>print history.</div>
+              <div style="font:400 13.5px/1.6 Archivo,sans-serif;color:{{ c.sub }};margin-top:12px;">Sign in or create an account with the same tap — if we've seen you before, we just let you in.</div>
+            </div>
+
+            <div style="margin-top:30px;display:flex;flex-direction:column;gap:10px;">
+              <div onClick="{{ authGoogle }}" style="height:58px;border-radius:99px;background:{{ c.ink }};display:flex;align-items:center;justify-content:center;gap:11px;cursor:pointer;" style-active="transform:scale(0.99)">
+                <span style="width:24px;height:24px;border-radius:99px;background:#d3f34d;display:flex;align-items:center;justify-content:center;font:800 13px/1 Archivo,sans-serif;color:#0f0f0e;">G</span>
+                <span style="font:700 15.5px/1 Archivo,sans-serif;color:#fbfbf8;">Continue with Google</span>
+              </div>
+              <div onClick="{{ authApple }}" style="height:58px;border-radius:99px;background:{{ c.surface }};border:1px solid {{ c.line }};display:flex;align-items:center;justify-content:center;gap:11px;cursor:pointer;" style-active="transform:scale(0.99)">
+                <span style="width:24px;height:24px;border-radius:99px;background:{{ c.chip }};display:flex;align-items:center;justify-content:center;font:700 13px/1 Archivo,sans-serif;color:{{ c.text }};">⌘</span>
+                <span style="font:700 15.5px/1 Archivo,sans-serif;color:{{ c.text }};">Continue with Apple</span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;margin:24px 0;">
+              <span style="flex:1;height:1px;background:{{ c.line }};display:block;"></span>
+              <span style="font:500 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.faint }};">OR MOBILE NUMBER</span>
+              <span style="flex:1;height:1px;background:{{ c.line }};display:block;"></span>
+            </div>
+
+            <div style="display:flex;gap:9px;align-items:center;">
+              <div style="flex:1;border-radius:18px;padding:13px 18px;background:{{ c.surface }};border:1px solid {{ c.line }};display:flex;align-items:center;gap:9px;">
+                <span style="font:600 14.5px/1 Archivo,sans-serif;color:{{ c.sub }};">+63</span>
+                <input value="{{ phone }}" onChange="{{ onPhone }}" onKeyDown="{{ onPhoneKey }}" placeholder="917 123 4567" style="flex:1;min-width:0;background:transparent;border:none;outline:none;padding:0;font:600 15px/1.2 Archivo,sans-serif;color:{{ c.text }};">
+              </div>
+              <div onClick="{{ authPhone }}" style="width:56px;height:52px;border-radius:18px;background:{{ phoneBtnBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;" style-active="transform:scale(0.97)">
+                <span style="font:700 18px/1 Archivo,sans-serif;color:{{ phoneBtnInk }};">→</span>
+              </div>
+            </div>
+
+            <div style="margin-top:auto;padding-top:26px;font:400 11.5px/1.6 Archivo,sans-serif;color:{{ c.faint }};text-align:center;">We only use this to keep your receipts and transaction numbers.</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+         <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div style="flex:1;display:flex;flex-direction:column;gap:11px;padding:14px 24px 20px;overflow:auto;min-height:0;">
+            <div style="flex:0 0 auto;">
+              <div style="font:800 27px/1.1 Archivo,sans-serif;letter-spacing:-0.035em;">Transaction<br>history</div>
+              <div style="font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};margin-top:12px;">{{ historyCount }}</div>
+            </div>
+
+            <sc-for list="{{ history }}" as="o" hint-placeholder-count="2">              <div onClick="{{ o.open }}" style="flex:0 0 auto;border-radius:22px;padding:19px 20px;cursor:pointer;background:{{ c.surface }};border:1.5px solid {{ o.border }};" style-active="transform:scale(0.99)">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="flex:1;min-width:0;font:800 19px/1 Archivo,sans-serif;letter-spacing:-0.03em;">{{ o.ref }}</span>
+                  <span style="flex:0 0 auto;border-radius:99px;padding:6px 11px;background:{{ o.stageBg }};display:flex;align-items:center;gap:5px;font:700 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:{{ o.stageInk }};">
+                    <sc-if value="{{ o.hasIcon }}" hint-placeholder-val="{{ false }}">
+                      <span style="font:800 10px/1 Archivo,sans-serif;">{{ o.stageIcon }}</span>
+                    </sc-if>
+                    <span>{{ o.stage }}</span>
+                  </span>
+                </div>
+                <div style="font:500 10px/1.4 'IBM Plex Mono',monospace;letter-spacing:0.08em;color:{{ c.faint }};margin-top:9px;">{{ o.meta }}</div>
+                <div style="font:400 12.5px/1.45 Archivo,sans-serif;color:{{ c.sub }};margin-top:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ o.docs }}</div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:15px;padding-top:14px;border-top:1px solid {{ c.line }};">
+                  <span style="font:400 12px/1.3 Archivo,sans-serif;color:{{ c.sub }};">{{ o.ship }}</span>
+                  <span style="font:700 15px/1 'IBM Plex Mono',monospace;">{{ o.total }}</span>
+                </div>
+              </div>
+            </sc-for>
+
+            <sc-if value="{{ noHistory }}" hint-placeholder-val="{{ false }}">
+              <div style="flex:1;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;border-radius:22px;border:1px dashed {{ c.line }};">
+                <div style="font:700 15px/1.3 Archivo,sans-serif;color:{{ c.sub }};">No Active Transactions</div>
+                <div style="font:400 12.5px/1.5 Archivo,sans-serif;color:{{ c.faint }};text-align:center;max-width:220px;">Your print requests will appear here once you've paid for one.</div>
+              </div>
+            </sc-if>
+
+            <div onClick="{{ reset }}" style="flex:0 0 auto;margin-top:6px;height:54px;border-radius:99px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ c.ink }};" style-active="transform:scale(0.99)">
+              <span style="font:700 14.5px/1 Archivo,sans-serif;color:#d3f34d;">New print request</span>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid {{ c.line }};background:{{ c.bg }};padding:12px 24px calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;">
+            <div onClick="{{ goHome }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+              <span style="width:18px;height:18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;">
+                <span style="font:700 13px/1 Archivo,sans-serif;color:{{ c.faint }};">↑</span>
+                <span style="width:14px;height:2px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+              </span>
+              <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">Upload</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 14px;">
+              <span style="width:18px;height:18px;display:flex;align-items:flex-end;justify-content:center;gap:2.5px;">
+                <span style="width:3px;height:8px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+                <span style="width:3px;height:14px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+                <span style="width:3px;height:11px;border-radius:9px;background:{{ c.text }};display:block;"></span>
+              </span>
+              <span style="font:600 10.5px/1 Archivo,sans-serif;">History</span>
+            </div>
+            <div onClick="{{ goChat }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;position:relative;">
+              <span style="width:18px;height:14px;border-radius:5px 5px 5px 2px;border:2px solid {{ c.faint }};box-sizing:border-box;display:block;"></span>
+              <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">Chat</span>
+              <sc-if value="{{ chatDot }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;top:0;right:8px;width:8px;height:8px;border-radius:99px;background:#d3f34d;"></span></sc-if>
+            </div>
+          </div>
+         </div>
+        </sc-if>
+
+        <sc-if value="{{ isChat }}" hint-placeholder-val="{{ false }}">
+         <div style="flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div style="flex:1;display:flex;flex-direction:column;padding:14px 0 16px;min-height:0;">
+            <div style="display:flex;align-items:center;gap:14px;padding:0 24px 18px;">
+              <span onClick="{{ chatBack }}" style="width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font:400 20px/1 Archivo,sans-serif;cursor:pointer;background:{{ c.surface }};border:1px solid {{ c.line }};color:{{ c.text }};">‹</span>
+              <div style="flex:1;">
+                <div style="font:800 17px/1.2 Archivo,sans-serif;letter-spacing:-0.02em;">Printa</div>
+                <div style="display:flex;align-items:center;gap:7px;margin-top:5px;">
+                  <span style="width:7px;height:7px;border-radius:99px;background:#7ba300;"></span>
+                  <span style="font:400 11.5px/1 Archivo,sans-serif;color:{{ c.sub }};">Replies in a few minutes</span>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ hasTxn }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:0 0 auto;margin:0 24px 6px;border-radius:20px;overflow:hidden;background:{{ c.surface }};border:1px solid {{ c.line }};">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 17px 12px;">
+                <span style="font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">TRANSACTION DETAILS</span>
+                <span style="flex:0 0 auto;border-radius:99px;padding:5px 10px;background:{{ payStatusBg }};font:700 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.12em;color:{{ payStatusInk }};">{{ payStatus }}</span>
+              </div>
+              <div style="padding:0 17px 12px;display:flex;justify-content:space-between;gap:10px;">
+                <span style="font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.1em;color:{{ c.faint }};">{{ orderRef }}</span>
+                <sc-if value="{{ isPaid }}" hint-placeholder-val="{{ false }}">
+                  <span style="font:500 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.06em;color:{{ c.faint }};">GCASH REF {{ gcashRef }}</span>
+                </sc-if>
+              </div>
+              <div style="padding:0 17px;display:flex;flex-direction:column;gap:6px;">
+                <sc-for list="{{ txnLines }}" as="line" hint-placeholder-count="2">
+                  <div style="display:flex;justify-content:space-between;gap:12px;">
+                    <span style="font:400 12.5px/1.4 Archivo,sans-serif;color:{{ c.sub }};">{{ line.label }}</span>
+                    <span style="font:500 12px/1.4 'IBM Plex Mono',monospace;white-space:nowrap;">{{ line.amount }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="height:1px;background:{{ c.line }};margin:13px 0;"></div>
+              <div style="padding:0 17px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;">
+                <span style="font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">TOTAL</span>
+                <span style="font:800 19px/1 Archivo,sans-serif;letter-spacing:-0.02em;">{{ activeTotal }}</span>
+              </div>
+              <div style="margin:14px 0 0;padding:13px 17px 15px;background:{{ c.bg }};border-top:1px solid {{ c.line }};">
+                <div style="font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:{{ c.sub }};">SHIPPING</div>
+                <div style="display:flex;align-items:center;gap:9px;margin-top:10px;">
+                  <span style="flex:0 0 auto;border-radius:99px;padding:7px 12px;background:#d3f34d;font:700 11.5px/1 Archivo,sans-serif;color:#0f0f0e;">{{ shipMode }}</span>
+                  <span style="flex:1;min-width:0;font:400 12px/1.4 Archivo,sans-serif;color:{{ c.sub }};">{{ shipDetail }}</span>
+                </div>
+              </div>
+            </div>
+            </sc-if>
+
+            <sc-if value="{{ noTxn }}" hint-placeholder-val="{{ true }}">
+              <div onClick="{{ goHome }}" style="flex:0 0 auto;margin:0 24px 6px;border-radius:20px;padding:19px;cursor:pointer;background:{{ c.surface }};border:1px dashed {{ c.line }};display:flex;align-items:center;gap:14px;" style-active="transform:scale(0.99)">
+                <span style="width:42px;height:42px;flex:0 0 auto;border-radius:14px;background:#d3f34d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;">
+                  <span style="font:700 15px/1 Archivo,sans-serif;color:#0f0f0e;">↑</span>
+                  <span style="width:16px;height:2px;border-radius:9px;background:#0f0f0e;display:block;"></span>
+                </span>
+                <div style="flex:1;min-width:0;">
+                  <div style="font:700 14.5px/1.25 Archivo,sans-serif;">Got something to print?</div>
+                  <div style="font:400 12px/1.45 Archivo,sans-serif;color:{{ c.sub }};margin-top:5px;">Upload a document and we'll quote it before you pay.</div>
+                </div>
+                <span style="flex:0 0 auto;font:400 18px/1 Archivo,sans-serif;color:{{ c.faint }};">›</span>
+              </div>
+            </sc-if>
+            <div style="flex:1;display:flex;flex-direction:column;gap:11px;padding:8px 24px;overflow:auto;min-height:0;">
+              <sc-for list="{{ messages }}" as="m" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:{{ m.justify }};">
+                  <div style="max-width:78%;border-radius:{{ m.radius }};padding:13px 16px;background:{{ m.bg }};border:1px solid {{ m.border }};">
+                    <div style="font:400 14px/1.5 Archivo,sans-serif;color:{{ m.color }};">{{ m.text }}</div>
+                    <div style="font:500 10px/1 'IBM Plex Mono',monospace;color:{{ m.metaColor }};margin-top:8px;">{{ m.time }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:14px 24px 0;display:flex;align-items:center;gap:10px;">
+              <div style="flex:1;border-radius:99px;padding:15px 19px;background:{{ c.surface }};border:1px solid {{ c.line }};">
+                <input value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onDraftKey }}" aria-label="Message the shop" maxlength="500" placeholder="Message the shop…" style="width:100%;background:transparent;border:none;outline:none;padding:0;font:400 14.5px/1.2 Archivo,sans-serif;color:{{ c.text }};">
+              </div>
+              <div onClick="{{ send }}" style="width:50px;height:50px;border-radius:99px;background:#d3f34d;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto;" style-active="transform:scale(0.95)">
+                <span style="font:700 18px/1 Archivo,sans-serif;color:#0f0f0e;">↑</span>
+              </div>
+            </div>
+            </sc-if>
+            <sc-if value="{{ chatBlocked }}" hint-placeholder-val="{{ false }}">
+              <div role="status" style="margin:14px 24px 0;border-radius:18px;padding:14px 16px;background:{{ c.chip }};font:600 12.5px/1.45 Archivo,sans-serif;color:{{ c.sub }};">You can’t send messages to this shop right now.</div>
+            </sc-if>
+          </div>
+
+          <div style="border-top:1px solid {{ c.line }};background:{{ c.bg }};padding:12px 24px calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;">
+            <div onClick="{{ goHome }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+              <span style="width:18px;height:18px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;">
+                <span style="font:700 13px/1 Archivo,sans-serif;color:{{ c.faint }};">↑</span>
+                <span style="width:14px;height:2px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+              </span>
+              <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">Upload</span>
+            </div>
+            <div onClick="{{ goHistory }}" style="display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;padding:4px 14px;">
+              <span style="width:18px;height:18px;display:flex;align-items:flex-end;justify-content:center;gap:2.5px;">
+                <span style="width:3px;height:8px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+                <span style="width:3px;height:14px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+                <span style="width:3px;height:11px;border-radius:9px;background:{{ c.faint }};display:block;"></span>
+              </span>
+              <span style="font:500 10.5px/1 Archivo,sans-serif;color:{{ c.faint }};">History</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 14px;">
+              <span style="width:18px;height:14px;border-radius:5px 5px 5px 2px;border:2px solid {{ c.text }};box-sizing:border-box;display:block;"></span>
+              <span style="font:600 10.5px/1 Archivo,sans-serif;">Chat</span>
+            </div>
+          </div>
+         </div>
+        </sc-if>
+
+      </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script >
+const POOL = [
+  { name: 'Thesis_Ch3_final.pdf', pages: 24, size: '1.8 MB' },
+  { name: 'Endorsement_Letter.docx', pages: 2, size: '48 KB' },
+  { name: 'Barangay_Clearance.pdf', pages: 1, size: '210 KB' },
+  { name: 'Resume_2026.pdf', pages: 2, size: '160 KB' }
+];
+
+const EXTRAS = [
+  { ico: { w: 16, h: 21, r: 3, barW: 9, barH: 2, barT: 9, barL: 3 }, key: 'paper', label: 'Buy Bond Paper', price: '₱1 / pc', group: 'supplies' },
+  { ico: { w: 22, h: 16, r: 4, barW: 16, barH: 2, barT: 4, barL: 2 }, key: 'brown', label: 'Brown envelope', price: '+₱8', flat: 8, size: true, group: 'supplies' },
+  { ico: { w: 22, h: 16, r: 7, barW: 3, barH: 9, barT: 3, barL: 8 }, key: 'plastic', label: 'Plastic envelope', price: '+₱15', flat: 15, size: true, group: 'supplies' },
+  { ico: { w: 17, h: 21, r: 4, barW: 11, barH: 3, barT: 3, barL: 2 }, key: 'staple', label: 'Stapled', price: '+₱3', flat: 3, group: 'binding' },
+  { ico: { w: 9, h: 21, r: 99, barW: 3, barH: 9, barT: 4, barL: 2 }, key: 'clip', label: 'Paper clip', price: '+₱2', flat: 2, group: 'binding' },
+  { ico: { w: 21, h: 18, r: 4, barW: 9, barH: 3, barT: 2, barL: 2 }, key: 'folder', label: 'Sliding folder', price: '+₱20', flat: 20, group: 'binding' },
+  { ico: { w: 18, h: 21, r: 4, barW: 4, barH: 15, barT: 2, barL: 2 }, key: 'bind', label: 'Soft bind', price: 'from ₱80', flat: 0, group: 'binding' }
+];
+
+// Which CMS add-on drives each customer option (matched by name, so renaming keeps working as long as the words stay).
+const ADDON_MATCH = { brown: 'brown envelope', plastic: 'plastic envelope', staple: 'staple', clip: 'paper clip', folder: 'sliding folder' };
+
+const BIND_TIERS = [
+  { max: 40, price: 80, label: 'Up to 40 pages' },
+  { max: 80, price: 90, label: '41–80 pages' },
+  { max: 120, price: 120, label: '81–120 pages' },
+  { max: 180, price: 150, label: '121–180 pages' },
+  { max: Infinity, price: 200, label: '180+ pages' }
+];
+
+const FOLDER_COLORS = [
+  { key: 'light', label: 'Light blue', swatch: '#bcd8ef' },
+  { key: 'dark', label: 'Dark blue', swatch: '#1f3f7a' },
+  { key: 'white', label: 'White', swatch: '#ffffff' }
+];
+
+const BIND_COLORS = [
+  { key: 'black', label: 'Black', swatch: '#17171a' },
+  { key: 'white', label: 'White', swatch: '#f4f4ef' },
+  { key: 'blue', label: 'Blue', swatch: '#2f5fbf' }
+];
+
+const RUSH_FEE = 100;
+
+const PAPERS = [
+  { key: 'short', label: 'Short', dim: '8.5 × 11' },
+  { key: 'a4', label: 'A4', dim: '8.3 × 11.7' },
+  { key: 'long', label: 'Long', dim: '8.5 × 13' }
+];
+
+const LIME = '#d3f34d';
+const STAGE_INDEX = { 'For Confirmation': 0, 'Confirmed': 1, 'Ready': 2, 'Successful': 3, 'Unclaimed': 4, 'Cancelled': 5, 'Rejected': 6, 'Refunded': 7 };
+const lc = v => String(v || '').trim().toLowerCase();
+const digits = v => String(v || '').replace(/\D/g, '');
+const pesoNum = (label, dflt) => { const m = String(label || '').replace(/,/g, '').match(/(\d+(?:\.\d+)?)/); return m ? +m[1] : dflt; };
+const clock = ms => new Date(ms || Date.now()).toLocaleTimeString('en-PH', { hour: 'numeric', minute: '2-digit' }).toUpperCase();
+const dayLabel = ms => {
+  const d = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(ms).setHours(0, 0, 0, 0)) / 86400000);
+  return d <= 0 ? 'Today' : d === 1 ? 'Yesterday' : new Date(ms).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' });
+};
+const PROFILE_KEY = 'printa.customer';
+const loadProfile = () => {
+  try {
+    const p = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
+    if (!p || typeof p !== 'object') return {};
+    const out = {};
+    ['name', 'address', 'phone'].forEach(k => { if (typeof p[k] === 'string') out[k] = p[k]; });
+    if (p.account === true) out.account = true;
+    return out;
+  } catch (e) { return {}; }
+};
+const saveProfile = p => { try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (e) {} };
+
+class Component extends DCLogic {
+  MAX_FILES = 1;
+
+  state = Object.assign({
+    screen: 'home', theme: 'auto', systemDark: false,
+    files: [], pages: 'all', range: '', orientation: 'portrait', paper: 'short', color: 'bw', copies: 1,
+    extras: {}, envSize: 'short', cart: [], toast: false, seq: 1,
+    bindDocs: {}, folderColor: 'light', bindColor: 'black', rush: false,
+    paperBuySize: 'short', paperQty: 10, notes: '',
+    name: 'Juan Dela Cruz', address: '12 Kalayaan Ave., Brgy. Malaya', phone: '',
+    copiesBy: {}, pickup: '', fulfil: 'pickup', courier: '', activeRef: '', account: false, from: 'home', authFrom: 'home',
+    draft: '', payError: '',
+    cat: null, allOrders: [], chats: [], accounts: [], audit: [], storeStatus: 'connecting', storeReady: false
+  }, loadProfile());
+
+  componentDidMount() {
+    this.mq = window.matchMedia('(prefers-color-scheme: dark)');
+    this.onMq = e => this.setState({ systemDark: e.matches });
+    this.setState({ systemDark: this.mq.matches });
+    this.mq.addEventListener('change', this.onMq);
+    this._unsub = window.PrintaStore.subscribe((d, st) => this.applyStore(d, st));
+    this.applyStore(window.PrintaStore.data, window.PrintaStore);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._toast); this._toast = null; clearTimeout(this._pay);
+    if (this.mq) this.mq.removeEventListener('change', this.onMq);
+    if (this._unsub) this._unsub();
+  }
+
+  applyStore(d, st) {
+    this.setState({
+      cat: d.catalog, allOrders: d.orders || [], chats: d.chats || [], accounts: d.accounts || [], audit: d.audit || [],
+      storeStatus: st.status, storeReady: st.status === 'offline' || !!st.ready
+    });
+  }
+
+  remember(patch) {
+    const s = Object.assign({}, this.state, patch || {});
+    saveProfile({ name: s.name, address: s.address, phone: s.phone, account: !!s.account });
+  }
+
+  peso(n) { return '₱' + Number(n || 0).toLocaleString('en-PH'); }
+
+  palette(dark) {
+    return dark ? {
+      bg: '#0f0f0e', surface: '#1a1a19', ink: '#242422', line: '#2e2e2a', chip: '#2a2a27', dash: '#3a3a35',
+      text: '#f5f5f0', sub: '#a6a69e', faint: '#8a8a82',
+      tint: '#3b4a12', tintInk: '#e7f9ae', tintSub: '#c2d97e'
+    } : {
+      bg: '#f4f4f0', surface: '#ffffff', ink: '#0f0f0e', line: '#e3e3dc', chip: '#eeeee8', dash: '#c9c9c0',
+      text: '#0f0f0e', sub: '#66665f', faint: '#8a8a82',
+      tint: '#e9f9b0', tintInk: '#2c3708', tintSub: '#4d5c17'
+    };
+  }
+
+  // ---------- what the CMS currently offers ----------
+  catalogView() {
+    const cat = this.state.cat || {};
+    const services = cat.services || [], addons = cat.addons || [];
+    const usable = a => !!a && a.available !== false && (+a.stock || 0) > 0;
+    const findAddon = key => addons.find(a => lc(a.name).indexOf(key) >= 0);
+    const paperFor = size => addons.find(a => /bond paper/i.test(a.name || '') && lc(a.name).indexOf(size) >= 0);
+    const printing = services.find(x => /print/i.test(x.name || ''));
+    const bindSvc = services.find(x => /bind/i.test(x.name || ''));
+    const avail = {}, price = {}, label = {};
+    Object.keys(ADDON_MATCH).forEach(k => {
+      const a = findAddon(ADDON_MATCH[k]);
+      avail[k] = usable(a);
+      price[k] = a ? pesoNum(a.price, 0) : 0;
+      label[k] = a ? (/^\+/.test(String(a.price).trim()) ? String(a.price).trim() : '+' + this.peso(price[k])) : '';
+    });
+    const paperSizes = PAPERS.filter(p => usable(paperFor(p.key.toLowerCase()))).map(p => p.key);
+    const paperPrice = {};
+    PAPERS.forEach(p => { const a = paperFor(p.key); paperPrice[p.key] = a ? pesoNum(a.price, 1) : 1; });
+    avail.paper = paperSizes.length > 0;
+    label.paper = this.peso(paperPrice[paperSizes[0] || 'short']) + ' / pc';
+    const coverColors = BIND_COLORS.filter(o => usable(addons.find(a => /cover/i.test(a.name || '') && lc(a.name).indexOf(o.key) >= 0))).map(o => o.key);
+    avail.bind = !!bindSvc && bindSvc.available !== false && coverColors.length > 0;
+    label.bind = 'from ₱' + BIND_TIERS[0].price;
+    const turnaround = printing && printing.turnaround ? String(printing.turnaround) : '15–30 MIN';
+    return {
+      loaded: !!this.state.cat,
+      open: !!this.state.cat && cat.shopOpen !== false,
+      printingOn: !!printing && printing.available !== false,
+      bw: printing && +printing.bw > 0 ? +printing.bw : 4,
+      color: printing && +printing.color > 0 ? +printing.color : 7,
+      turnaround,
+      avail, price, label, paperSizes, paperPrice, coverColors,
+      autoConfirm: !!(cat.settings && cat.settings.autoConfirm),
+      pickups: (cat.pickups || []).filter(p => p.available !== false),
+      allPickups: cat.pickups || [],
+      couriers: (cat.couriers || []).filter(c => c.available !== false)
+    };
+  }
+
+  // Live: the store only hands this visitor their own records (matched by their sign-in).
+  // Local demo: records are matched by the name typed at checkout.
+  live() { return window.PrintaStore.status === 'live'; }
+  myAccount() {
+    const s = this.state;
+    if (this.live()) return s.accounts[0] || null;
+    const n = lc(s.name), ph = digits(s.phone);
+    return s.accounts.find(a => (n && lc(a.name) === n) || (ph.length >= 10 && digits(a.phone) === ph)) || null;
+  }
+  myChat() {
+    if (this.live()) return this.state.chats[0] || null;
+    const n = lc(this.state.name); return n ? this.state.chats.find(c => lc(c.name) === n) || null : null;
+  }
+  stageTimes(t) {
+    const out = Object.assign({}, t.stageAt || {});
+    (this.state.audit || []).forEach(e => {
+      if (e.tag !== 'STATUS' || !e.at || !(e.txn === t.id || (e.text || '').indexOf(t.ref) >= 0)) return;
+      const m = /→ (.+)$/.exec(e.text || '');
+      if (m && !out[m[1].trim()]) out[m[1].trim()] = e.at;
+    });
+    return out;
+  }
+  myOrders() {
+    const n = lc(this.state.name);
+    const list = this.live() ? this.state.allOrders : (n ? this.state.allOrders.filter(t => lc(t.customer) === n) : []);
+    return list.map(t => {
+      const docs = t.docs || [];
+      const printed = t.printed || {};
+      const nPrinted = docs.filter((d, i) => printed[i]).length;
+      return {
+        id: t.id, ref: t.ref, gcashRef: t.gcash || '', total: +t.total || 0, refunded: +t.refunded || 0,
+        stage: STAGE_INDEX[t.stage] !== undefined ? STAGE_INDEX[t.stage] : 0,
+        rows: t.rows || [], docs: docs.map(d => d.name), placed: clock(t.placedAt), day: dayLabel(t.placedAt),
+        placedAt: t.placedAt, closedAt: t.closedAt || null,
+        fulfil: /delivery/i.test(t.fulfil || '') ? 'delivery' : 'pickup',
+        courierName: /delivery/i.test(t.fulfil || '') ? String(t.fulfil).replace(/\s*delivery$/i, '') : '',
+        pickupId: t.pickupId || '', fulfilFull: t.fulfilFull || t.fulfil || '',
+        printedAll: docs.length > 0 && nPrinted === docs.length, printedSome: nPrinted > 0,
+        times: this.stageTimes(t)
+      };
+    });
+  }
+  shipOf(o) {
+    if (o.fulfil === 'delivery') return (o.courierName || 'Courier') + ' delivery';
+    const pk = (this.state.cat && this.state.cat.pickups || []).find(p => p.id === o.pickupId);
+    return pk ? pk.name : (o.fulfilFull.replace(/^Pick-up — /, '') || 'Pick-up');
+  }
+
+  // ---------- pricing (works on the live form or on a saved cart item) ----------
+  rangeCount(st) {
+    st = st || this.state;
+    if (st.pages !== 'range' || !st.range.trim()) return 0;
+    return st.range.split(',').reduce((acc, part) => {
+      const m = part.trim().match(/^(\d+)\s*-\s*(\d+)$/);
+      if (m) return acc + Math.max(0, (+m[2]) - (+m[1]) + 1);
+      return acc + (/^\d+$/.test(part.trim()) ? 1 : 0);
+    }, 0);
+  }
+  copiesOf(f, st) { st = st || this.state; const v = st.copiesBy[f.name]; return v ? v : 1; }
+  pagesOf(f, st) { const r = this.rangeCount(st); return r > 0 ? Math.min(r, f.pages) : f.pages; }
+  sheetCount(st) { st = st || this.state; return st.files.reduce((n, f) => n + this.pagesOf(f, st) * this.copiesOf(f, st), 0); }
+  setCopies(name, n) {
+    this.setState(s => ({ copiesBy: Object.assign({}, s.copiesBy, { [name]: Math.max(1, Math.min(99, n)) }) }));
+  }
+  bindTier(pages) { return BIND_TIERS.filter(t => pages <= t.max)[0] || BIND_TIERS[BIND_TIERS.length - 1]; }
+  paperOf(st, cv) { const ok = cv.paperSizes; return ok.indexOf(st.paper) >= 0 ? st.paper : (ok[0] || st.paper); }
+  buySizeOf(st, cv) { const ok = cv.paperSizes; return ok.indexOf(st.paperBuySize) >= 0 ? st.paperBuySize : (ok[0] || st.paperBuySize); }
+  bindColorOf(st, cv) { const ok = cv.coverColors; return ok.indexOf(st.bindColor) >= 0 ? st.bindColor : (ok[0] || st.bindColor); }
+  extraOn(st, cv, key) { return !!st.extras[key] && !!cv.avail[key]; }
+  bindFiles(st, cv) { st = st || this.state; cv = cv || this.catalogView(); return this.extraOn(st, cv, 'bind') ? st.files.filter(f => st.bindDocs[f.name] !== false) : []; }
+  bindTotals(st, cv) {
+    st = st || this.state; cv = cv || this.catalogView();
+    const docs = this.bindFiles(st, cv);
+    const bind = docs.reduce((n, f) => n + this.bindTier(this.pagesOf(f, st)).price, 0);
+    const rush = st.rush ? RUSH_FEE * docs.length : 0;
+    return { docs, bind, rush };
+  }
+  money(st, cv) {
+    st = st || this.state; cv = cv || this.catalogView();
+    const isColor = st.color === 'color';
+    const unit = isColor ? cv.color : cv.bw;
+    const pages = this.sheetCount(st);
+    let total = unit * pages;
+    const paper = (PAPERS.filter(p => p.key === this.paperOf(st, cv))[0] || PAPERS[0]).label;
+    const rows = [{ label: (isColor ? 'Colored' : 'B&W') + ' · ' + paper + ' · ' + pages + ' sheets', amount: this.peso(unit * pages) }];
+    EXTRAS.forEach(x => {
+      if (!this.extraOn(st, cv, x.key)) return;
+      if (x.key === 'bind') {
+        const b = this.bindTotals(st, cv);
+        if (!b.docs.length) return;
+        total += b.bind + b.rush;
+        rows.push({ label: 'Soft bind · ' + b.docs.length + (b.docs.length === 1 ? ' document' : ' documents'), amount: this.peso(b.bind) });
+        if (b.rush) rows.push({ label: 'Rush — same day · ' + b.docs.length + '×', amount: this.peso(b.rush) });
+        return;
+      }
+      if (x.key === 'paper') {
+        const size = this.buySizeOf(st, cv);
+        const amt = st.paperQty * (cv.paperPrice[size] || 1);
+        total += amt;
+        const sz = (PAPERS.filter(p => p.key === size)[0] || PAPERS[0]).label;
+        rows.push({ label: 'Bond paper · ' + sz + ' · ' + st.paperQty + ' pcs', amount: this.peso(amt) });
+        return;
+      }
+      const amt = cv.price[x.key] !== undefined ? cv.price[x.key] : x.flat;
+      total += amt;
+      rows.push({ label: x.size ? x.label + ' · ' + st.envSize : x.label, amount: this.peso(amt) });
+    });
+    return { pages, total, rows };
+  }
+  cfgSummary(st, f, cv) {
+    cv = cv || this.catalogView();
+    const paper = (PAPERS.filter(p => p.key === this.paperOf(st, cv))[0] || PAPERS[0]).label;
+    const on = EXTRAS.filter(x => this.extraOn(st, cv, x.key)).map(x => x.label);
+    return ['×' + (st.copiesBy[f.name] || 1),
+      st.pages === 'range' && st.range.trim() ? 'Pages ' + st.range.trim() : 'All pages',
+      st.orientation === 'landscape' ? 'Landscape' : 'Portrait',
+      paper, st.color === 'color' ? 'Colored' : 'B&W'].concat(on).join(' · ');
+  }
+  docFor(st, cv) {
+    const f = st.files[0];
+    const pk = PAPERS.filter(p => p.key === this.paperOf(st, cv))[0] || PAPERS[0];
+    const addons = [];
+    EXTRAS.forEach(x => {
+      if (!this.extraOn(st, cv, x.key)) return;
+      if (x.key === 'bind') {
+        if (!this.bindFiles(st, cv).length) return;
+        const col = (BIND_COLORS.filter(o => o.key === this.bindColorOf(st, cv))[0] || BIND_COLORS[0]).label;
+        addons.push('Soft bind — ' + col + ' cover');
+        if (st.rush) addons.push('Rush — same day');
+      } else if (x.key === 'folder') {
+        addons.push('Sliding folder — ' + (FOLDER_COLORS.filter(o => o.key === st.folderColor)[0] || FOLDER_COLORS[0]).label);
+      } else if (x.key === 'paper') {
+        addons.push('Bond paper — ' + (PAPERS.filter(p => p.key === this.buySizeOf(st, cv))[0] || PAPERS[0]).label + ' × ' + st.paperQty);
+      } else if (x.size) {
+        addons.push(x.label + ' — ' + st.envSize);
+      } else addons.push(x.label);
+    });
+    return {
+      name: f.name, ext: (f.name.split('.').pop() || '').toUpperCase(), pages: this.pagesOf(f, st), size: f.size,
+      copies: st.copiesBy[f.name] || 1,
+      range: st.pages === 'range' && st.range.trim() ? 'Pages ' + st.range.trim() : 'All pages',
+      orientation: st.orientation === 'landscape' ? 'Landscape' : 'Portrait',
+      paper: pk.label + ' · ' + pk.dim, color: st.color === 'color' ? 'Colored' : 'B&W', sides: 'Single-sided',
+      addons, notes: st.notes || ''
+    };
+  }
+
+  CFG_KEYS = ['files', 'pages', 'range', 'orientation', 'paper', 'color', 'extras', 'envSize', 'bindDocs', 'folderColor', 'bindColor', 'rush', 'paperBuySize', 'paperQty', 'notes', 'copiesBy'];
+
+  BLANK = {
+    pages: 'all', range: '', orientation: 'portrait', paper: 'short', color: 'bw',
+    extras: {}, envSize: 'short', folderColor: 'light', bindColor: 'black', rush: false, bindDocs: {},
+    paperBuySize: 'short', paperQty: 10, notes: '', copiesBy: {}
+  };
+
+  nextDoc(cart, files) {
+    const taken = cart.map(i => i.cfg.files[0].name).concat((files || []).map(f => f.name));
+    return POOL.filter(p => taken.indexOf(p.name) < 0)[0] || POOL[0];
+  }
+
+  canOrder() {
+    const cv = this.catalogView();
+    if (!this.state.storeReady) return 'The shop is still loading.';
+    if (!cv.loaded) return 'The shop isn’t set up yet.';
+    if (!cv.open) return 'The shop is closed and isn’t taking new orders right now.';
+    if (!cv.printingOn) return 'Printing is unavailable right now.';
+    if (!cv.paperSizes.length) return 'The shop is out of bond paper right now.';
+    const acct = this.myAccount();
+    if (acct && acct.status === 'Blocked') return 'This account can’t place orders. Message the shop for help.';
+    return '';
+  }
+
+  addToCart = () => {
+    this.setState(s => {
+      if (!s.files[0]) return {};
+      const cfg = {};
+      this.CFG_KEYS.forEach(k => { cfg[k] = s[k]; });
+      const item = { id: 'it' + s.seq, cfg };
+      return Object.assign({}, this.BLANK, { seq: s.seq + 1, cart: s.cart.concat([item]), files: [], toast: true, screen: 'cart' });
+    });
+    clearTimeout(this._toast);
+    this._toast = setTimeout(() => this.setState({ toast: false }), 2600);
+  };
+
+  newRequest = () => {
+    if (this.canOrder()) { this.setState({ screen: 'home' }); return; }
+    this.setState(s => Object.assign({}, this.BLANK, { files: [this.nextDoc(s.cart, [])], screen: 'configure', toast: false }));
+  };
+
+  editItem(id) {
+    return () => this.setState(s => {
+      const it = s.cart.filter(x => x.id === id)[0];
+      if (!it) return {};
+      return Object.assign({}, this.BLANK, it.cfg, { cart: s.cart.filter(x => x.id !== id), screen: 'configure', toast: false });
+    });
+  }
+
+  removeItem(id) { return () => this.setState(s => ({ cart: s.cart.filter(x => x.id !== id) })); }
+
+  cartTotals(cv) {
+    cv = cv || this.catalogView();
+    const cart = this.state.cart;
+    return { total: cart.reduce((n, i) => n + this.money(i.cfg, cv).total, 0), count: cart.length };
+  }
+
+  cartRows(cv) {
+    cv = cv || this.catalogView();
+    return this.state.cart.map((i, n) => {
+      const f = i.cfg.files[0];
+      const copies = i.cfg.copiesBy[f.name] || 1;
+      return {
+        no: String(n + 1).padStart(2, '0'), name: f.name, copies: '×' + copies,
+        label: String(n + 1).padStart(2, '0') + ' · ' + f.name + ' · ×' + copies,
+        amount: this.peso(this.money(i.cfg, cv).total)
+      };
+    });
+  }
+
+  go(screen) { return () => this.setState({ screen }); }
+
+  finishAuth = () => {
+    const s = this.state;
+    if (!this.myAccount() && s.name.trim()) {
+      const uid = window.PrintaStore.uid;
+      const id = this.live() && uid ? uid : 'u' + Date.now();
+      window.PrintaStore.put('accounts/' + id, Object.assign({
+        seq: Date.now(), name: s.name.trim(), email: '', phone: s.phone.trim(), role: 'Customer', status: 'Active',
+        joined: 'JOINED ' + new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' }).toUpperCase(), orders: 0
+      }, this.live() && uid ? { customerUid: uid } : {}));
+    }
+    this.setState({ account: true, screen: s.authFrom });
+    this.remember({ account: true });
+  };
+
+  addFile = () => {
+    if (this.canOrder()) return;
+    this.setState(s => (
+      s.files.length ? { screen: 'configure' }
+        : Object.assign({}, this.BLANK, { files: [this.nextDoc(s.cart, [])], screen: 'configure', toast: false })
+    ));
+  };
+
+  openChat = () => {
+    const ch = this.myChat();
+    const acct = this.myAccount();
+    const blocked = (ch && ch.blocked) || (acct && acct.status === 'Blocked');
+    if (ch && ch.custUnread && !blocked) window.PrintaStore.put('chats/' + ch.id, Object.assign({}, ch, { custUnread: 0 }));
+    this.setState(st => ({ screen: 'chat', from: st.screen }));
+  };
+
+  send = () => {
+    const t = this.state.draft.trim();
+    if (!t) return;
+    const s = this.state;
+    if (!s.name.trim()) { this.setState({ screen: 'details' }); return; }
+    const acct = this.myAccount();
+    const ch = this.myChat();
+    if ((ch && ch.blocked) || (acct && acct.status === 'Blocked')) return;
+    const msg = { me: false, kind: 'text', text: t.slice(0, 500), time: clock() };
+    const latest = this.myOrders()[0];
+    if (ch) {
+      window.PrintaStore.put('chats/' + ch.id, Object.assign({}, ch, {
+        messages: (ch.messages || []).concat([msg]), unread: (ch.unread || 0) + 1, tag: latest ? latest.ref : ch.tag
+      }));
+    } else {
+      const uid = window.PrintaStore.uid;
+      const live = this.live() && uid;
+      window.PrintaStore.put('chats/' + (live ? 'c-' + uid : 'ch' + Date.now()), Object.assign({
+        seq: Date.now(), name: s.name.trim(), tag: latest ? latest.ref : 'NO ORDER', unread: 1, custUnread: 0,
+        muted: false, blocked: false, messages: [msg]
+      }, live ? { customerUid: uid } : {}));
+    }
+    this.setState({ draft: '' });
+  };
+
+  addMins(t, mins) { return t; }
+
+  STAGE_COLORS = [
+    { bg: '#f7d67a', ink: '#4a3505', dark: '#f7d67a' },  // For Confirmation
+    { bg: '#b9d4f2', ink: '#0f2740', dark: '#b9d4f2' },  // Confirmed
+    { bg: '#d3f34d', ink: '#0f0f0e', dark: '#d3f34d' },  // Ready
+    { bg: '#8fd6a4', ink: '#123a1f', dark: '#8fd6a4' },  // Successful
+    { bg: '#f0a68c', ink: '#5a1c0a', dark: '#f0a68c' },  // Unclaimed
+    { bg: '#f6cfc4', ink: '#6b2011', dark: '#f6cfc4' },  // Cancelled
+    { bg: '#e0d2cd', ink: '#4a2118', dark: '#e0d2cd' },  // Rejected
+    { bg: '#d9c6ef', ink: '#3a1f5a', dark: '#d9c6ef' }   // Refunded
+  ];
+
+  STAGES = ['For Confirmation', 'Confirmed', 'Ready', 'Successful', 'Unclaimed', 'Cancelled', 'Rejected', 'Refunded'];
+
+  missing(cv) {
+    const s = this.state;
+    const miss = [];
+    if (!s.name.trim()) miss.push('full name');
+    if (!s.address.trim()) miss.push('address');
+    if (s.fulfil === 'pickup' && !cv.pickups.some(p => p.id === s.pickup)) miss.push('pick-up point');
+    if (s.fulfil === 'delivery' && !cv.couriers.some(c => c.id === s.courier)) miss.push('courier');
+    return miss;
+  }
+
+  pay = () => {
+    const block = this.canOrder();
+    if (block) { this.setState({ payError: block }); return; }
+    if (!this.state.cart.length) return;
+    this.setState({ screen: 'paying', payError: '' });
+    this.remember();
+    clearTimeout(this._pay);
+    this._pay = setTimeout(() => {
+      const again = this.canOrder();
+      if (again) { this.setState({ screen: 'details', payError: again + ' You were not charged.' }); return; }
+      const s = this.state, cv = this.catalogView();
+      const miss = this.missing(cv);
+      if (miss.length) { this.setState({ screen: 'details' }); return; }
+      window.PrintaStore.nextRef().then(ref => this.placeOrder(ref));
+    }, 1700);
+  };
+
+  placeOrder(ref) {
+      const s = this.state, cv = this.catalogView();
+      if (!s.cart.length) return;
+      const items = s.cart.map(it => ({ cfg: it.cfg, m: this.money(it.cfg, cv) }));
+      const total = items.reduce((n, x) => n + x.m.total, 0);
+      const pk = cv.pickups.find(p => p.id === s.pickup);
+      const co = cv.couriers.find(c => c.id === s.courier);
+      const isDel = s.fulfil === 'delivery';
+      const acct = this.myAccount();
+      const id = 'o' + Date.now();
+      const uid = window.PrintaStore.uid;
+      const order = {
+        ref, customer: s.name.trim(), customerUid: this.live() && uid ? uid : null, phone: s.phone.trim() || (acct && acct.phone) || '',
+        gcash: '9' + String(Math.floor(Math.random() * 1e11)).padStart(11, '0'),
+        registered: !!acct || !!s.account,
+        rush: items.some(x => x.cfg.rush && this.bindFiles(x.cfg, cv).length > 0),
+        total, refunded: 0,
+        stage: cv.autoConfirm ? 'Confirmed' : 'For Confirmation',
+        placedAt: Date.now(),
+        fulfil: isDel ? co.name + ' delivery' : 'Pick-up',
+        fulfilFull: isDel ? co.name + ' delivery — ' + s.address.trim() : 'Pick-up — ' + (pk.short || pk.name),
+        pickupId: isDel ? null : pk.id, courierId: isDel ? co.id : null,
+        address: s.address.trim(),
+        docs: items.map(x => this.docFor(x.cfg, cv)),
+        docCharges: items.map(x => x.m.rows.map(r => [r.label, r.amount])),
+        rows: [].concat.apply([], items.map(x => x.m.rows)),
+        remarks: [], printed: {}
+      };
+      const store = window.PrintaStore;
+      store.save('orders/' + id, order).then(err => {
+        if (err) { this.setState({ screen: 'details', payError: 'Your order wasn’t placed. ' + err + ' You were not charged.' }); return; }
+        this.afterOrder(ref, id, order, total, cv, acct);
+      });
+  }
+
+  afterOrder(ref, id, order, total, cv, acct) {
+      const store = window.PrintaStore;
+      store.put('audit/au' + Date.now() + 'c', { tag: 'ORDER', text: ref + ' placed in the app by ' + order.customer + ' · ' + this.peso(total) + (cv.autoConfirm ? ' · auto-confirmed' : ''), txn: id, at: Date.now(), by: order.customer });
+      if (acct && !this.live()) store.put('accounts/' + acct.id, Object.assign({}, acct, { orders: (+acct.orders || 0) + 1 }));
+      this.setState({ screen: 'queue', activeRef: ref, cart: [] });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const dark = s.theme === 'auto' ? s.systemDark : s.theme === 'dark';
+    const c = this.palette(dark);
+    const cv = this.catalogView();
+    const m = this.money(s, cv);
+    const ct = this.cartTotals(cv);
+    const mine = this.myOrders();
+    const active = mine.find(o => o.ref === s.activeRef) || mine[0] || null;
+    const acct = this.myAccount();
+    const blocked = !!acct && acct.status === 'Blocked';
+    const chat = this.myChat();
+    const chatBlocked = blocked || !!(chat && chat.blocked);
+    const block = this.canOrder();
+    const signed = !!s.account || (!!acct && acct.status !== 'Blocked');
+
+    const miss = this.missing(cv);
+
+    const pick = (on) => on
+      ? { bg: LIME, border: LIME, ink: '#0f0f0e', sub: 'rgba(15,15,14,0.62)', dot: '#0f0f0e' }
+      : { bg: c.surface, border: c.line, ink: c.text, sub: c.sub, dot: c.line };
+    const seg = (on) => ({ bg2: on ? c.ink : 'transparent', text: on ? (dark ? c.text : '#f5f5f0') : c.sub });
+
+    const buySize = this.buySizeOf(s, cv);
+    const buySizeLabel = (PAPERS.filter(p => p.key === buySize)[0] || PAPERS[0]).label;
+    const extras = EXTRAS.filter(x => cv.avail[x.key]).map(x => {
+      const p = pick(!!s.extras[x.key]);
+      return {
+        label: x.label, price: cv.label[x.key] || x.price, group: x.group, bg: p.bg, border: p.border, ink: p.ink, sub: p.sub,
+        hasNote: x.key === 'paper', note: buySizeLabel.toUpperCase() + ' · ' + s.paperQty + ' PCS',
+        icoW: x.ico.w + 'px', icoH: x.ico.h + 'px', icoR: x.ico.r + 'px',
+        barW: x.ico.barW + 'px', barH: x.ico.barH + 'px', barT: x.ico.barT + 'px', barL: x.ico.barL + 'px',
+        toggle: () => this.setState(st => ({ extras: Object.assign({}, st.extras, { [x.key]: !st.extras[x.key] }) }))
+      };
+    });
+
+    const refPretty = ((active && active.gcashRef) || '').replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    const ord = active || { stage: 0, fulfil: s.fulfil, courierName: '', pickupId: s.pickup, fulfilFull: '', docs: s.files.map(x => x.name), placed: clock(), day: 'Today', times: {}, printedAll: false, printedSome: false };
+    const readyLabel = ord.fulfil === 'delivery' ? 'Ready for Delivery' : 'Ready for Pick-up';
+    const readyNote = ord.fulfil === 'delivery'
+      ? (ord.courierName || 'Courier') + ' rider booked · fare paid on arrival'
+      : this.shipOf(ord);
+    const stg = ord.stage;
+    const dayTag = ord.day && ord.day !== 'Today' ? ord.day + ' · ' : '';
+    const dcount = ord.docs.length;
+    const T = name => ord.times && ord.times[name] ? clock(ord.times[name]) : '';
+    const prepDone = stg >= 2 && stg !== 5 && stg !== 6 ? 4 : stg === 1 ? (ord.printedAll ? 2 : ord.printedSome ? 1 : 0) : 0;
+    const prepSubs = ['Pages printed', 'Ink and paper checked', 'Finishing and binding', 'Packed and labelled']
+      .map((label, i) => ({
+        label, done: i < prepDone,
+        markBg: i < prepDone ? LIME : 'transparent',
+        markBorder: i < prepDone ? LIME : c.line,
+        markInk: i < prepDone ? '#0f0f0e' : 'transparent',
+        color: i < prepDone ? c.text : c.sub
+      }));
+    const ALERTS = {
+      4: ['Unclaimed', 'Not picked up — message the shop to arrange it'],
+      5: ['Cancelled', 'This order was cancelled by the shop'],
+      6: ['Rejected', 'Payment couldn’t be confirmed — message the shop'],
+      7: ['Refunded', 'Refunded ' + this.peso(active ? active.refunded : 0) + ' to you']
+    };
+    const reachedFrom = () => {
+      const order = ['For Confirmation', 'Confirmed', 'Ready', 'Successful'];
+      let r = 0;
+      order.forEach((n, i) => { if (ord.times && ord.times[n]) r = Math.max(r, i); });
+      return r;
+    };
+    const reached = stg <= 3 ? stg : stg === 4 ? 2 : reachedFrom();
+    const raw = [
+      { at: 0, ci: 0, label: 'For Confirmation', note: dayTag + dcount + ' document' + (dcount === 1 ? '' : 's') + (refPretty ? ' · Ref ' + refPretty : ''), time: ord.placed },
+      { at: 1, ci: 1, label: 'Confirmed', note: 'Pages, finishing and payment checked', time: T('Confirmed') },
+      { at: 1.5, ci: 1, label: 'Preparing', note: prepDone >= 4 ? 'All four steps done' : prepDone + ' of 4 steps done', time: '', subs: prepSubs },
+      { at: 2, ci: 2, label: readyLabel, note: readyNote, time: T('Ready') },
+      stg >= 4
+        ? { at: 3, ci: stg, label: ALERTS[stg][0], note: ALERTS[stg][1], time: T(this.STAGES[stg]) || (active && active.closedAt ? clock(active.closedAt) : '—'), alert: true }
+        : { at: 3, ci: 3, label: 'Successful', note: ord.fulfil === 'delivery' ? 'Handed to the rider' : 'Claimed at the pick-up point', time: T('Successful') || (active && active.closedAt ? clock(active.closedAt) : '') }
+    ];
+    let busyTaken = false;
+    const steps = raw.map(st => {
+      const isAlert = !!st.alert;
+      const done = !isAlert && (stg === 3 ? true : st.at <= reached);
+      const busy = stg <= 2 && !done && !isAlert && !busyTaken;
+      if (busy) busyTaken = true;
+      const idle = !done && !busy && !isAlert;
+      return {
+        label: st.label, note: st.note,
+        time: done || busy || isAlert ? (st.time || '') : '—',
+        done, busy, alert: isAlert, idle,
+        hasSubs: !!st.subs && (done || busy),
+        subs: st.subs || [],
+        markBg: this.STAGE_COLORS[st.ci].bg,
+        markInk: this.STAGE_COLORS[st.ci].ink,
+        color: idle ? c.sub : c.text
+      };
+    });
+
+    // notice at the top of the home screen
+    const loading = !s.storeReady;
+    let notice = null;
+    if (loading) notice = ['Loading the shop…', 'Hang on while we get today’s services and prices.', 'info'];
+    else if (!cv.loaded) notice = ['The shop isn’t set up yet', 'Check back soon.', 'warn'];
+    else if (blocked) notice = ['You can’t place orders', 'This account is blocked. Message the shop if you think this is a mistake.', 'warn'];
+    else if (!cv.open) notice = ['The shop is closed', 'We’re not taking new orders right now. Your existing orders are still being tracked.', 'warn'];
+    else if (!cv.printingOn) notice = ['Printing is unavailable', 'The shop has paused printing for now. Please check back later.', 'warn'];
+    else if (!cv.paperSizes.length) notice = ['Out of bond paper', 'The shop can’t take printing orders until it restocks.', 'warn'];
+    const warn = notice && notice[2] === 'warn';
+
+    const chatMsgs = chat && chat.messages && chat.messages.length ? chat.messages : [{ me: true, kind: 'text', text: 'Hi! Send your files any time — we print in the order requests come in.', time: '' }];
+    const turnParts = /^([\d–\-\s]+)\s*(.*)$/.exec(cv.turnaround) || [];
+    const turnNum = turnParts[1] ? turnParts[1].trim() : cv.turnaround;
+    const turnUnitRaw = (turnParts[2] || '').trim().toUpperCase();
+    const turnUnit = /^MIN/.test(turnUnitRaw) ? 'MINUTES' : /^HR|^HOUR/.test(turnUnitRaw) ? 'HOURS' : (turnUnitRaw || '');
+    const activeOpen = mine.filter(o => o.stage <= 2);
+    const effPaper = this.paperOf(s, cv);
+    const effBind = this.bindColorOf(s, cv);
+    const hasPay = !miss.length && !block;
+
+    return {
+      isDark: dark, c,
+      outerBg: dark ? '#0b0b0a' : '#e8e8e3',
+      frameShadow: '0 0 0 1px ' + (dark ? '#1f1f1d' : '#deded6'),
+      isHome: s.screen === 'home', isConfigure: s.screen === 'configure', isDetails: s.screen === 'details',
+      isPaying: s.screen === 'paying', isQueue: s.screen === 'queue', isChat: s.screen === 'chat',
+      isHistory: s.screen === 'history', isCart: s.screen === 'cart',
+
+      hasNotice: !!notice,
+      noticeTitle: notice ? notice[0] : '', noticeBody: notice ? notice[1] : '',
+      noticeBg: warn ? (dark ? '#3a2e26' : '#fbe6de') : c.tint,
+      noticeInk: warn ? (dark ? '#f6cfc4' : '#5a1c0a') : c.tintInk,
+      noticeDot: warn ? '#c7502f' : (loading ? '#e0a33a' : '#5c7a00'),
+      uploadCursor: block ? 'not-allowed' : 'pointer',
+      uploadOpacity: block ? '0.45' : '1',
+      uploadCta: block ? 'Not available right now' : 'Choose file',
+      turnNum, turnUnit,
+      chatDot: !!(chat && chat.custUnread > 0),
+      bwLabel: this.peso(cv.bw) + ' / PAGE', colorLabel: this.peso(cv.color) + ' / PAGE',
+
+      cartCount: ct.count,
+      cartCountLabel: ct.count + (ct.count === 1 ? ' ITEM' : ' ITEMS'),
+      hasCart: ct.count > 0, emptyCart: ct.count === 0,
+      showCartChip: ct.count > 0,
+      chipBg: ct.count ? c.ink : c.surface,
+      chipBorder: ct.count ? c.ink : c.line,
+      chipIco: ct.count ? '#fbfbf8' : c.text,
+      cartTotal: this.peso(ct.total),
+      coLines: this.cartRows(cv),
+      coTotal: this.peso(ct.total),
+      toastOn: s.toast,
+      toastAnim: (ct.count % 2 ? 'printaToastA' : 'printaToastB') + ' 2600ms ease forwards',
+      toastText: ct.count + (ct.count === 1 ? ' request in your cart' : ' requests in your cart'),
+      goCart: () => this.setState({ screen: 'cart', toast: false }),
+      newRequest: this.newRequest,
+      addToCart: () => { if (this.state.files.length) this.addToCart(); },
+      checkout: () => { if (this.state.cart.length) this.setState({ screen: 'details' }); },
+      checkoutFromHome: () => { if (this.state.cart.length) this.setState({ screen: 'details', toast: false }); },
+      coBg: ct.count ? LIME : '#2b2b28',
+      coInk: ct.count ? '#0f0f0e' : '#6e6e66',
+      coCursor: ct.count ? 'pointer' : 'not-allowed',
+      cartItems: s.cart.map((it, i) => {
+        const f = it.cfg.files[0];
+        const im = this.money(it.cfg, cv);
+        return {
+          n: 'REQUEST ' + String(i + 1).padStart(2, '0'),
+          name: f.name, kind: (f.name.split('.').pop() || '').toUpperCase(), summary: this.cfgSummary(it.cfg, f, cv),
+          meta: im.pages + (im.pages === 1 ? ' sheet' : ' sheets'),
+          notes: it.cfg.notes, hasNotes: !!(it.cfg.notes && it.cfg.notes.trim()),
+          total: this.peso(im.total),
+          edit: this.editItem(it.id), remove: this.removeItem(it.id)
+        };
+      }),
+
+      th: {
+        trackBg: dark ? '#2a2a27' : '#ddddd5',
+        knobBg: dark ? LIME : '#0f0f0e',
+        knobInk: dark ? '#0f0f0e' : LIME,
+        knobIcon: dark ? '☾' : '☀',
+        knobX: dark ? '30px' : '0px',
+        sunColor: dark ? 'rgba(245,245,240,0.3)' : 'rgba(15,15,14,0)',
+        moonColor: dark ? 'rgba(245,245,240,0)' : 'rgba(15,15,14,0.4)'
+      },
+      toggleTheme: () => this.setState({ theme: dark ? 'light' : 'dark' }),
+
+      submitBg: s.files.length ? '#d3f34d' : '#2b2b28',
+      submitInk: s.files.length ? '#0f0f0e' : '#6e6e66',
+      submitCursor: s.files.length ? 'pointer' : 'not-allowed',
+      submitNote: s.files.length ? 'PAY FOR EVERYTHING IN ONE GO AT CHECKOUT' : 'UPLOAD A DOCUMENT TO CONTINUE',
+      fileCountLabel: 'REQUEST ' + String(ct.count + 1).padStart(2, '0'),
+
+      goHome: this.go('home'), goConfigure: this.go('configure'),
+      goDetails: () => { if (this.state.files.length) this.setState({ screen: 'details' }); },
+      goQueue: () => this.setState({ screen: 'queue', activeRef: activeOpen[0] ? activeOpen[0].ref : s.activeRef }),
+      hasTxn: !!active, noTxn: !active,
+      orderRef: active ? active.ref : '',
+      isPaid: !!active,
+      payStatus: active ? (active.refunded >= active.total && active.total > 0 ? 'REFUNDED' : 'PAID') : 'UNPAID',
+      payStatusBg: active ? '#d3f34d' : (dark ? '#3a2e26' : '#fbe6de'),
+      payStatusInk: active ? '#0f0f0e' : '#c7502f',
+      gcashRef: refPretty,
+      shipMode: (active ? active.fulfil : s.fulfil) === 'delivery' ? 'Delivery' : 'Pick-up',
+      shipDetail: active ? this.shipOf(active) : '—',
+
+      goChat: this.openChat,
+      chatBack: () => this.setState(st => ({ screen: st.from === 'queue' ? 'queue' : st.from === 'history' ? 'history' : 'home' })),
+      reset: () => this.setState({ screen: 'home', files: [], extras: {}, copiesBy: {}, copies: 1, pages: 'all', range: '' }),
+
+      addFile: this.addFile,
+      canAddMore: s.files.length < this.MAX_FILES,
+      files: s.files.map((f, i) => ({
+        name: f.name, meta: this.pagesOf(f) + (this.pagesOf(f) > 1 ? ' PAGES · ' : ' PAGE · ') + f.size,
+        copies: this.copiesOf(f),
+        kind: (f.name.split('.').pop() || '').toUpperCase(),
+        sheetsLabel: (this.pagesOf(f) * this.copiesOf(f)) + (this.pagesOf(f) * this.copiesOf(f) === 1 ? ' sheet' : ' sheets'),
+        minusInk: this.copiesOf(f) > 1 ? c.text : c.faint,
+        minusBg: c.chip,
+        tileBg: this.copiesOf(f) > 1 ? c.tint : c.surface,
+        tileBorder: this.copiesOf(f) > 1 ? 'transparent' : c.line,
+        labelInk: this.copiesOf(f) > 1 ? c.tintSub : c.sub,
+        numInk: this.copiesOf(f) > 1 ? c.tintInk : c.text,
+        inc: () => this.setCopies(f.name, this.copiesOf(f) + 1),
+        dec: () => this.setCopies(f.name, this.copiesOf(f) - 1),
+        remove: () => this.setState(st => ({ files: st.files.filter((_, j) => j !== i) }))
+      })),
+
+      pgAll: pick(s.pages === 'all'), pgRange: pick(s.pages === 'range'),
+      setAllPages: () => this.setState({ pages: 'all' }), setRangePages: () => this.setState({ pages: 'range' }),
+      range: s.range, onRange: e => this.setState({ pages: 'range', range: e.target.value }),
+      orP: pick(s.orientation === 'portrait'), orL: pick(s.orientation === 'landscape'),
+      setPortrait: () => this.setState({ orientation: 'portrait' }), setLandscape: () => this.setState({ orientation: 'landscape' }),
+      papers: PAPERS.filter(p => cv.paperSizes.indexOf(p.key) >= 0).map(p => {
+        const st = pick(effPaper === p.key);
+        return { label: p.label, dim: p.dim, bg: st.bg, border: st.border, ink: st.ink, sub: st.sub, set: () => this.setState({ paper: p.key }) };
+      }),
+      ink: pick(s.color === 'bw'), col: pick(s.color === 'color'),
+      setBW: () => this.setState({ color: 'bw' }), setColor: () => this.setState({ color: 'color' }),
+      copies: s.copies,
+      pagesTotal: m.pages + (m.pages === 1 ? ' PAGE TOTAL' : ' PAGES TOTAL'),
+      sheetSummary: s.files.length + (s.files.length === 1 ? ' document · ' : ' documents · ') + m.pages + (m.pages === 1 ? ' sheet to print' : ' sheets to print'),
+      extras,
+      binding: extras.filter(x => x.group === 'binding'),
+      supplies: extras.filter(x => x.group === 'supplies'),
+      needsSize: this.extraOn(s, cv, 'brown') || this.extraOn(s, cv, 'plastic'),
+      needsBind: this.extraOn(s, cv, 'bind'),
+      needsPaper: this.extraOn(s, cv, 'paper'),
+      paperQty: s.paperQty,
+      paperQtyNote: s.paperQty + (s.paperQty === 1 ? ' piece · ' : ' pieces · ') + this.peso(s.paperQty * (cv.paperPrice[buySize] || 1)),
+      paperMinusInk: s.paperQty > 1 ? c.text : c.faint,
+      paperMinus: () => this.setState(st => ({ paperQty: Math.max(1, st.paperQty - 5) })),
+      paperPlus: () => this.setState(st => ({ paperQty: Math.min(500, st.paperQty + 5) })),
+      buySizes: PAPERS.filter(p => cv.paperSizes.indexOf(p.key) >= 0).map(p => {
+        const on = buySize === p.key;
+        return {
+          label: p.label, dim: p.dim,
+          bg: on ? c.ink : c.surface, border: on ? c.ink : c.line,
+          ink: on ? '#fbfbf8' : c.text, sub: on ? '#9d9d95' : c.sub,
+          set: () => this.setState({ paperBuySize: p.key })
+        };
+      }),
+      bindDocList: s.files.map(fl => {
+        const on = s.bindDocs[fl.name] !== false;
+        const tier = this.bindTier(this.pagesOf(fl));
+        return {
+          name: fl.name, pages: this.pagesOf(fl) + ' pages · ' + tier.label.toLowerCase(),
+          price: this.peso(tier.price),
+          bg: on ? c.ink : c.surface, border: on ? c.ink : c.line,
+          ink: on ? '#fbfbf8' : c.text, sub: on ? '#9d9d95' : c.sub,
+          markBg: on ? LIME : 'transparent', markBorder: on ? LIME : c.line, markInk: on ? '#0f0f0e' : 'transparent',
+          toggle: () => this.setState(st => ({ bindDocs: Object.assign({}, st.bindDocs, { [fl.name]: st.bindDocs[fl.name] === false }) }))
+        };
+      }),
+      folderColors: FOLDER_COLORS.map(o => ({
+        label: o.label, swatch: o.swatch,
+        bg: s.folderColor === o.key ? c.chip : 'transparent',
+        border: s.folderColor === o.key ? c.text : c.line,
+        ink: s.folderColor === o.key ? c.text : c.sub,
+        set: () => this.setState({ folderColor: o.key })
+      })),
+      bindColors: BIND_COLORS.filter(o => cv.coverColors.indexOf(o.key) >= 0).map(o => ({
+        label: o.label, swatch: o.swatch,
+        bg: effBind === o.key ? c.chip : 'transparent',
+        border: effBind === o.key ? c.text : c.line,
+        ink: effBind === o.key ? c.text : c.sub,
+        set: () => this.setState({ bindColor: o.key })
+      })),
+      rushOn: s.rush,
+      rushTrackBg: s.rush ? c.ink : c.chip,
+      rushKnobX: s.rush ? '22px' : '2px',
+      rushNote: s.rush
+        ? '+' + this.peso(RUSH_FEE) + ' per document · ready today'
+        : this.peso(RUSH_FEE) + ' per document if you need it today',
+      toggleRush: () => this.setState(st => ({ rush: !st.rush })),
+      bindSummary: (() => { const b = this.bindTotals(s, cv); return b.docs.length
+        ? b.docs.length + (b.docs.length === 1 ? ' document · ' : ' documents · ') + this.peso(b.bind + b.rush)
+        : 'Pick at least one document'; })(),
+      bindTiers: BIND_TIERS.map(t => ({ label: t.label, price: this.peso(t.price) })),
+      szShort: seg(s.envSize === 'short'), szLong: seg(s.envSize === 'long'),
+      setShort: () => this.setState({ envSize: 'short' }), setLong: () => this.setState({ envSize: 'long' }),
+      totalLabel: this.peso(m.total),
+
+      notes: s.notes,
+      notesMax: 100,
+      notesCount: s.notes.length + '/100',
+      notesCountInk: s.notes.length >= 100 ? '#c7502f' : c.sub,
+      onNotes: e => this.setState({
+        notes: e.target.value.replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 100)
+      }),
+
+      name: s.name, address: s.address,
+      onName: e => this.setState({ name: e.target.value, activeRef: '' }),
+      onAddress: e => this.setState({ address: e.target.value }),
+      pickupOpts: cv.pickups.map(p => {
+        const st = pick(s.pickup === p.id);
+        return {
+          name: p.name, sub: [p.hours, p.note].filter(Boolean).join(' · '),
+          bg: st.bg, border: st.border, ink: st.ink, subInk: st.sub, dot: st.dot,
+          set: () => this.setState({ pickup: p.id }),
+          showCard: s.pickup === p.id && !!(p.photo || p.addr),
+          hasPhoto: !!p.photo, photo: p.photo || '', alt: 'Street view of ' + p.name,
+          addr: p.addr || p.name, city: (p.city || '').toUpperCase(),
+          hasMap: !!p.map, map: p.map || ''
+        };
+      }),
+      noPickups: cv.pickups.length === 0,
+      courierOpts: cv.couriers.map(co => {
+        const st = pick(s.courier === co.id);
+        return { name: co.name, note: co.note || [co.eta, co.fee].filter(Boolean).join(' · '), bg: st.bg, border: st.border, ink: st.ink, sub: st.sub, dot: st.dot, set: () => this.setState({ courier: co.id }) };
+      }),
+      noCouriers: cv.couriers.length === 0,
+      pickupName: s.fulfil === 'delivery'
+        ? ((cv.couriers.find(x => x.id === s.courier) || {}).name || 'Courier') + ' delivery'
+        : ((cv.pickups.find(x => x.id === s.pickup) || {}).name || 'Not selected'),
+      lines: m.rows,
+      txnLines: active ? active.rows : m.rows,
+      fSelf: pick(s.fulfil === 'pickup'), fDeliv: pick(s.fulfil === 'delivery'),
+      isSelfPickup: s.fulfil === 'pickup', isDelivery: s.fulfil === 'delivery',
+      setSelfPickup: () => this.setState({ fulfil: 'pickup', courier: '' }),
+      setDelivery: () => this.setState({ fulfil: 'delivery', pickup: '' }),
+      nameBorder: s.name.trim() ? c.line : '#e0653f',
+      addrBorder: s.address.trim() ? c.line : '#e0653f',
+      hasMissing: miss.length > 0 || !!block || !!s.payError,
+      missingNote: s.payError ? s.payError.toUpperCase() : block ? block.toUpperCase() : miss.length ? 'STILL NEEDED · ' + miss.join(' · ').toUpperCase() : '',
+      payBg: hasPay ? LIME : '#2b2b28',
+      payInk: hasPay ? '#0f0f0e' : '#6e6e66',
+      payMarkBg: hasPay ? '#0f0f0e' : '#6e6e66',
+      payMarkInk: hasPay ? LIME : '#2b2b28',
+      payCursor: hasPay ? 'pointer' : 'not-allowed',
+      payNow: () => { if (!this.missing(this.catalogView()).length) this.pay(); },
+
+      txn: active ? active.ref : '—',
+      activeTotal: active ? this.peso(active.total) : this.peso(m.total),
+      activeShip: active ? this.shipOf(active) : '—',
+      steps,
+      activeStageInk: this.STAGE_COLORS[ord.stage].dark,
+      activeRefNote: (active && active.refunded > 0 && ord.stage !== 7 ? 'Partly refunded (' + this.peso(active.refunded) + '). ' : '') + (ord.stage === 3
+        ? 'Transaction number — keep this for your receipt.'
+        : ord.stage === 4
+          ? 'Unclaimed — message the shop with this transaction number to arrange a re-print.'
+          : ord.stage === 5 ? 'Cancelled — message the shop about a refund if you were charged.'
+          : ord.stage === 6 ? 'Rejected — message the shop with this transaction number.'
+          : ord.stage === 7 ? 'Refunded ' + this.peso(active ? active.refunded : 0) + ' — keep this number for your records.'
+          : 'Transaction number — show this to claim your printed documents.'),
+      activeEta: [cv.turnaround.toUpperCase(), cv.turnaround.toUpperCase(), 'READY NOW', 'COMPLETED', 'NOT CLAIMED', 'CLOSED', 'CLOSED', 'CLOSED'][ord.stage] || '',
+      activeStage: (ord.stage === 2 ? readyLabel : this.STAGES[ord.stage]).toUpperCase(),
+      historyCount: (() => {
+        const act = activeOpen.length;
+        const doneN = mine.length - act;
+        const a = act + (act === 1 ? ' ACTIVE REQUEST' : ' ACTIVE REQUESTS');
+        return doneN ? a + ' · ' + doneN + ' CLOSED' : a;
+      })(),
+      history: mine.map(o => ({
+        ref: o.ref,
+        meta: o.day + ' ' + o.placed + ' · ' + o.docs.length + (o.docs.length === 1 ? ' document' : ' documents'),
+        docs: o.docs.join(', '),
+        ship: this.shipOf(o),
+        total: this.peso(o.total),
+        stage: o.stage === 2 ? (o.fulfil === 'delivery' ? 'READY FOR DELIVERY' : 'READY FOR PICK-UP') : this.STAGES[o.stage].toUpperCase(),
+        stageIcon: o.stage === 1 || o.stage === 3 ? '✓' : o.stage >= 4 ? '!' : '',
+        hasIcon: o.stage === 1 || o.stage >= 3,
+        stageBg: this.STAGE_COLORS[o.stage].bg,
+        stageInk: this.STAGE_COLORS[o.stage].ink,
+        isActive: active && o.ref === active.ref,
+        border: active && o.ref === active.ref ? c.text : c.line,
+        open: () => this.setState({ activeRef: o.ref, screen: 'queue' })
+      })),
+      hasHistory: mine.length > 0, noHistory: mine.length === 0,
+      goHistory: this.go('history'),
+      queueBack: () => this.setState({ screen: 'history' }),
+      hasOrder: activeOpen.length > 0, noOrder: activeOpen.length === 0,
+      queueNo: activeOpen[0] ? activeOpen[0].ref.replace(/^TXN-/, '') : '',
+      noAccount: !signed, hasAccount: signed,
+      showCreateTile: !activeOpen.length && !signed, showSignedTile: !activeOpen.length && signed,
+      isAuth: s.screen === 'auth',
+      phone: s.phone,
+      phoneBtnBg: s.phone.trim() ? c.ink : c.chip,
+      phoneBtnInk: s.phone.trim() ? LIME : c.faint,
+      onPhone: e => this.setState({ phone: e.target.value }),
+      onPhoneKey: e => { if (e.key === 'Enter' && this.state.phone.trim()) this.finishAuth(); },
+      authGoogle: this.finishAuth, authApple: this.finishAuth,
+      authPhone: () => { if (this.state.phone.trim()) this.finishAuth(); },
+      authBack: () => this.setState(st => ({ screen: st.authFrom })),
+      createAccount: () => this.setState(st => ({ screen: 'auth', authFrom: st.screen })),
+
+      messages: chatMsgs.map(msg => {
+        const mineMsg = !msg.me;
+        const text = msg.kind === 'image' ? '📷 ' + msg.text : msg.kind === 'file' ? '📎 ' + msg.text + (msg.size ? ' · ' + msg.size : '') : msg.text;
+        return {
+          text, time: msg.time || '',
+          justify: mineMsg ? 'flex-end' : 'flex-start',
+          radius: mineMsg ? '20px 20px 7px 20px' : '20px 20px 20px 7px',
+          bg: mineMsg ? LIME : c.surface,
+          border: mineMsg ? LIME : c.line,
+          color: mineMsg ? '#0f0f0e' : c.text,
+          metaColor: mineMsg ? 'rgba(15,15,14,0.55)' : c.sub
+        };
+      }),
+      chatOpen: !chatBlocked, chatBlocked,
+      draft: s.draft,
+      onDraft: e => this.setState({ draft: e.target.value }),
+      onDraftKey: e => { if (e.key === 'Enter') this.send(); },
+      send: this.send
+    };
+  }
+}
+</script>
+</body>
+</html>

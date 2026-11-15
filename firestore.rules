@@ -1,0 +1,96 @@
+rules_version = '2';
+
+// Printa — who may read and write what.
+//   Admins: anyone whose Firebase Auth UID has a document in /admins (add it in the console).
+//   Customers: every Customer View visitor is signed in anonymously and only sees their own
+//   orders, chat and account. Anyone can read the catalog (services, prices, pick-up points).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function catalog() { return get(/databases/$(database)/documents/shop/catalog).data; }
+    function blocked() {
+      return exists(/databases/$(database)/documents/accounts/$(request.auth.uid))
+        && get(/databases/$(database)/documents/accounts/$(request.auth.uid)).data.status == 'Blocked';
+    }
+    function mine(data) { return signedIn() && data.customerUid == request.auth.uid; }
+
+    // Admin list. Each admin can check only their own entry; edit it in the Firebase console.
+    match /admins/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Services, add-ons, pick-up points, couriers, shop open/closed, settings.
+    match /shop/catalog {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Next transaction number. Customers may only move it up by one.
+    match /shop/counter {
+      allow read: if signedIn();
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin()
+        || (signedIn()
+            && request.resource.data.keys().hasOnly(['next'])
+            && request.resource.data.next == resource.data.next + 1);
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.customerUid == request.auth.uid);
+      allow create: if isAdmin()
+        || (mine(request.resource.data)
+            && !blocked()
+            && catalog().shopOpen == true
+            && request.resource.data.refunded == 0
+            && request.resource.data.total is number
+            && (request.resource.data.stage == 'For Confirmation'
+                || (request.resource.data.stage == 'Confirmed' && catalog().settings.autoConfirm == true)));
+      allow update, delete: if isAdmin();
+    }
+
+    // One chat per customer, id "c-<their uid>". Customers can add messages and mark them read.
+    match /chats/{chatId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.customerUid == request.auth.uid);
+      allow create: if isAdmin()
+        || (mine(request.resource.data)
+            && chatId == 'c-' + request.auth.uid
+            && request.resource.data.blocked == false
+            && !blocked());
+      allow update: if isAdmin()
+        || (mine(resource.data)
+            && resource.data.blocked == false
+            && !blocked()
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['messages', 'unread', 'custUnread', 'tag']));
+      allow delete: if isAdmin();
+    }
+
+    // Customer accounts, id = their uid. Customers can't change their own status or role.
+    match /accounts/{accountId} {
+      allow read: if isAdmin() || (signedIn() && accountId == request.auth.uid);
+      allow create: if isAdmin()
+        || (signedIn()
+            && accountId == request.auth.uid
+            && request.resource.data.status == 'Active'
+            && request.resource.data.role == 'Customer');
+      allow update: if isAdmin()
+        || (signedIn()
+            && accountId == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'phone', 'email']));
+      allow delete: if isAdmin();
+    }
+
+    // Activity log. Customers can only add the "order placed" entry.
+    match /audit/{entryId} {
+      allow read, update, delete: if isAdmin();
+      allow create: if isAdmin() || (signedIn() && request.resource.data.tag == 'ORDER');
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

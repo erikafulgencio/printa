@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Printa CMS</title>
+<meta name="theme-color" content="#ffffff">
+<script>window.PRINTA_APP = 'cms';</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="./firebase-config.js"></script>
+<script src="./printa-sample.js"></script>
+<script src="./printa-store.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><style>
+html,body{margin:0;background:#f4f4f0;font-family:Archivo,system-ui,sans-serif;}
+input:focus{outline:2px solid #d3f34d;outline-offset:1px;}
+</style></helmet>
+<div style="min-height:100vh;">
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ showSeed }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:150;width:min(560px,calc(100vw - 32px));box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:18px;background:#0f0f0e;color:#fbfbf8;box-shadow:0 14px 34px rgba(15,15,14,0.25);">
+        <div style="flex:1;min-width:0;">
+          <div style="font:700 14px/1.3 Archivo,sans-serif;">Your shop is empty</div>
+          <div style="font:400 12px/1.45 Archivo,sans-serif;color:#a6a69e;margin-top:4px;">Load the starter catalog and sample orders, then edit them to match your shop.</div>
+          <sc-if value="{{ hasSeedError }}" hint-placeholder-val="{{ false }}"><div style="font:600 12px/1.4 Archivo,sans-serif;color:#f0a68c;margin-top:6px;">{{ seedError }}</div></sc-if>
+        </div>
+        <button type="button" onClick="{{ loadSeed }}" style="flex:0 0 auto;height:40px;padding:0 16px;border-radius:12px;border:0;background:#d3f34d;color:#0f0f0e;font:800 13px/1 Archivo,sans-serif;cursor:pointer;">{{ seedLabel }}</button>
+      </div>
+    </sc-if>
+    <dc-import name="PrintaAdmin" hint-size="100%,100vh"></dc-import>
+  </sc-if>
+
+  <sc-if value="{{ isGate }}" hint-placeholder-val="{{ true }}">
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;box-sizing:border-box;">
+      <form onSubmit="{{ submit }}" style="width:100%;max-width:380px;background:#ffffff;border:1px solid #ecece6;border-radius:24px;padding:30px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;box-shadow:0 14px 34px -24px rgba(15,15,14,0.35);">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <span style="width:34px;height:34px;border-radius:11px;background:#0f0f0e;display:flex;align-items:center;justify-content:center;"><span style="width:10px;height:10px;border-radius:3px;background:#d3f34d;display:block;"></span></span>
+          <span style="font:800 19px/1 Archivo,sans-serif;letter-spacing:-0.02em;">Printa.</span>
+          <span style="font:600 9px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:#8a8a82;">CMS</span>
+        </div>
+        <div>
+          <h1 style="margin:6px 0 0;font:800 24px/1.15 Archivo,sans-serif;letter-spacing:-0.03em;">{{ gateTitle }}</h1>
+          <p style="margin:8px 0 0;font:400 13px/1.5 Archivo,sans-serif;color:#66665f;">{{ gateBody }}</p>
+        </div>
+        <sc-if value="{{ showForm }}" hint-placeholder-val="{{ true }}">
+          <label style="display:flex;flex-direction:column;gap:7px;font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:#66665f;">EMAIL
+            <input type="email" autocomplete="username" value="{{ email }}" onChange="{{ onEmail }}" style="height:44px;border-radius:13px;border:1px solid #e4e4dc;background:#f7f7f4;padding:0 14px;font:400 14px/1 Archivo,sans-serif;color:#0f0f0e;box-sizing:border-box;width:100%;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px;font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:0.14em;color:#66665f;">PASSWORD
+            <input type="password" autocomplete="current-password" value="{{ password }}" onChange="{{ onPassword }}" style="height:44px;border-radius:13px;border:1px solid #e4e4dc;background:#f7f7f4;padding:0 14px;font:400 14px/1 Archivo,sans-serif;color:#0f0f0e;box-sizing:border-box;width:100%;">
+          </label>
+          <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="font:600 12.5px/1.45 Archivo,sans-serif;color:{{ msgInk }};">{{ msg }}</div>
+          </sc-if>
+          <button type="submit" style="height:46px;border-radius:14px;border:0;background:#d3f34d;color:#0f0f0e;font:800 14px/1 Archivo,sans-serif;cursor:pointer;">{{ submitLabel }}</button>
+          <button type="button" onClick="{{ reset }}" style="align-self:flex-start;border:0;background:none;padding:0;font:600 12px/1 Archivo,sans-serif;color:#5c7a00;cursor:pointer;">Forgot password?</button>
+        </sc-if>
+        <sc-if value="{{ isDenied }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#f7f7f4;border-radius:13px;padding:12px 14px;font:500 11px/1.5 'IBM Plex Mono',monospace;color:#3b3a36;word-break:break-all;">USER UID<br>{{ uid }}</div>
+          <button type="button" onClick="{{ signOut }}" style="height:44px;border-radius:14px;border:1px solid #ecece6;background:#ffffff;font:700 13px/1 Archivo,sans-serif;cursor:pointer;">Sign out</button>
+        </sc-if>
+      </form>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showSync }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:{{ syncBottom }};z-index:200;max-width:calc(100vw - 32px);box-sizing:border-box;display:flex;align-items:center;gap:9px;padding:9px 15px;border-radius:99px;background:{{ syncBg }};color:{{ syncInk }};font:600 11.5px/1.35 Archivo,sans-serif;box-shadow:0 6px 20px rgba(15,15,14,0.18);">
+      <span style="width:8px;height:8px;border-radius:99px;flex:0 0 auto;background:{{ syncDot }};"></span>
+      <span>{{ syncText }}</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { status: window.PrintaStore.status, note: window.PrintaStore.note, ready: false, empty: false, email: '', password: '', msg: '', msgOk: false, busy: false, seeding: false, seedError: '' };
+  componentDidMount() {
+    this._unsub = window.PrintaStore.subscribe((d, st) => {
+      const empty = st.status === 'live' && st.ready && !d.catalog;
+      if (st.status !== this.state.status || st.note !== this.state.note || st.ready !== this.state.ready || empty !== this.state.empty) {
+        this.setState({ status: st.status, note: st.note, ready: st.ready, empty });
+      }
+    });
+  }
+  componentWillUnmount() { if (this._unsub) this._unsub(); }
+  submit = e => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (this.state.busy) return;
+    if (!this.state.email.trim() || !this.state.password) { this.setState({ msg: 'Enter your email and password.', msgOk: false }); return; }
+    this.setState({ busy: true, msg: '' });
+    window.PrintaStore.signIn(this.state.email, this.state.password).then(err => {
+      this.setState({ busy: false, msg: err || '', msgOk: false, password: err ? this.state.password : '' });
+    });
+  };
+  reset = () => {
+    if (!this.state.email.trim()) { this.setState({ msg: 'Type your email first, then tap Forgot password.', msgOk: false }); return; }
+    window.PrintaStore.resetPassword(this.state.email).then(err => {
+      this.setState({ msg: err || 'Check your email for a link to reset your password.', msgOk: !err });
+    });
+  };
+  loadSeed = () => {
+    if (this.state.seeding) return;
+    this.setState({ seeding: true, seedError: '' });
+    window.PrintaStore.loadSample().then(err => this.setState({ seeding: false, seedError: err || '' }));
+  };
+  renderVals() {
+    const s = this.state;
+    const offline = s.status === 'offline';
+    const connecting = s.status === 'connecting';
+    const text = s.note || (connecting ? 'Connecting to the shop…' : '');
+    const sync = {
+      showSync: !!text,
+      syncText: text,
+      syncBg: offline ? '#fbe6de' : '#0f0f0e',
+      syncInk: offline ? '#5a1c0a' : '#fbfbf8',
+      syncDot: offline ? '#c7502f' : connecting ? '#f2d477' : '#d3f34d'
+    };
+    const isApp = s.status === 'live' || s.status === 'offline';
+    const denied = s.status === 'denied';
+    const gate = !isApp;
+    return Object.assign(sync, {
+      showSync: sync.showSync && (isApp || s.status === 'connecting'),
+      syncBottom: '22px',
+      isApp, isGate: gate, isDenied: denied,
+      showForm: s.status === 'signin',
+      gateTitle: denied ? 'No access' : s.status === 'signin' ? 'Sign in to the CMS' : 'Connecting…',
+      gateBody: denied
+        ? 'You are signed in, but this account isn’t on the Printa admin list. Add the User UID below to the admins collection in Firestore, then reload.'
+        : s.status === 'signin' ? 'Only shop staff can open this page.' : 'Checking your sign-in.',
+      uid: window.PrintaStore.uid || '',
+      email: s.email, password: s.password,
+      onEmail: e => this.setState({ email: e.target.value }),
+      onPassword: e => this.setState({ password: e.target.value }),
+      submit: this.submit, reset: this.reset,
+      signOut: () => window.PrintaStore.signOut(),
+      hasMsg: !!s.msg, msg: s.msg, msgInk: s.msgOk ? '#2c3708' : '#8a3a1c',
+      submitLabel: s.busy ? 'Signing in…' : 'Sign in',
+      showSeed: s.empty, loadSeed: this.loadSeed,
+      seedLabel: s.seeding ? 'Loading…' : 'Load starter data',
+      hasSeedError: !!s.seedError, seedError: s.seedError
+    });
+  }
+}
+</script>
+</body>
+</html>

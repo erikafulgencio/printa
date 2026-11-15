@@ -1,0 +1,10 @@
+{
+  "name": "printa",
+  "private": true,
+  "description": "Printa print shop: Customer View (mobile) and CMS, two static sites on one Firebase database.",
+  "scripts": {
+    "build:shop": "node scripts/build.mjs shop",
+    "build:cms": "node scripts/build.mjs cms"
+  },
+  "engines": { "node": ">=18" }
+}

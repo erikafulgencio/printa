@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Printa — Print, scan, bind</title>
+<meta name="theme-color" content="#f4f4f0">
+<script>window.PRINTA_APP = 'shop';</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="./firebase-config.js"></script>
+<script src="./printa-sample.js"></script>
+<script src="./printa-store.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics=""><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"><style>
+html,body{margin:0;background:#f4f4f0;font-family:Archivo,system-ui,sans-serif;}
+input:focus{outline:2px solid #d3f34d;outline-offset:1px;}
+</style></helmet>
+<div style="min-height:100vh;">
+  <dc-import name="PrintaShop" hint-size="100%,100vh"></dc-import>
+
+  <sc-if value="{{ showSync }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:fixed;left:50%;transform:translateX(-50%);bottom:{{ syncBottom }};z-index:200;max-width:calc(100vw - 32px);box-sizing:border-box;display:flex;align-items:center;gap:9px;padding:9px 15px;border-radius:99px;background:{{ syncBg }};color:{{ syncInk }};font:600 11.5px/1.35 Archivo,sans-serif;box-shadow:0 6px 20px rgba(15,15,14,0.18);">
+      <span style="width:8px;height:8px;border-radius:99px;flex:0 0 auto;background:{{ syncDot }};"></span>
+      <span>{{ syncText }}</span>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { status: window.PrintaStore.status, note: window.PrintaStore.note };
+  componentDidMount() {
+    this._unsub = window.PrintaStore.subscribe((d, st) => {
+      if (st.status !== this.state.status || st.note !== this.state.note) this.setState({ status: st.status, note: st.note });
+    });
+  }
+  componentWillUnmount() { if (this._unsub) this._unsub(); }
+  renderVals() {
+    const s = this.state;
+    const offline = s.status === 'offline';
+    const connecting = s.status === 'connecting';
+    const text = s.note || (connecting ? 'Connecting to the shop…' : '');
+    const sync = {
+      showSync: !!text,
+      syncText: text,
+      syncBg: offline ? '#fbe6de' : '#0f0f0e',
+      syncInk: offline ? '#5a1c0a' : '#fbfbf8',
+      syncDot: offline ? '#c7502f' : connecting ? '#f2d477' : '#d3f34d'
+    };
+    return Object.assign(sync, { syncBottom: '92px' });
+  }
+}
+</script>
+</body>
+</html>
